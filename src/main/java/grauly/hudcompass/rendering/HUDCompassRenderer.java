@@ -2,6 +2,7 @@ package grauly.hudcompass.rendering;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import grauly.hudcompass.HudCompassClient;
+import grauly.hudcompass.mixin.PlayerListHudAccessor;
 import grauly.hudcompass.util.MathHelper;
 import grauly.hudcompass.waypoints.Waypoint;
 import grauly.hudcompass.waypoints.WaypointManager;
@@ -24,6 +25,9 @@ public class HUDCompassRenderer {
     private static final Identifier MAP_ICONS = new Identifier("minecraft", "textures/map/map_icons.png");
     @Environment(EnvType.CLIENT)
     public static void onRender(MatrixStack matrices, float tickDelta) {
+        if(((PlayerListHudAccessor) mc.inGameHud.getPlayerListHud()).isVisible()) {
+            return;
+        }
         var width = mc.getWindow().getScaledWidth();
         var textRenderer = mc.textRenderer;
         var player = mc.player;
