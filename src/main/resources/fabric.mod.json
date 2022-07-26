@@ -9,12 +9,12 @@
     "Grauly"
   ],
   "contact": {
-    "homepage": "https://doesnotexist.yet/",
-    "sources": "https://github.com/maybe?"
+    "homepage": "",
+    "sources": "https://github.com/Grauly/HudCompass?"
   },
 
   "license": "MIT",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/hudcompass/icon.png",
 
   "environment": "*",
   "entrypoints": {
