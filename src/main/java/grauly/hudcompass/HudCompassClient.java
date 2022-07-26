@@ -2,6 +2,7 @@ package grauly.hudcompass;
 
 import grauly.hudcompass.rendering.HUDCompassRenderer;
 import grauly.hudcompass.screens.NewWaypointScreen;
+import grauly.hudcompass.screens.WaypointListScreen;
 import grauly.hudcompass.waypoints.WaypointManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -20,16 +21,25 @@ public class HudCompassClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         HudRenderCallback.EVENT.register(HUDCompassRenderer::onRender);
-        var keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        var newWaypointKeyBind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.hudcompass.newpoint", // The translation key of the keybinding's name
+                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
+                GLFW.GLFW_KEY_V, // The keycode of the key
+                "category.hudcompass.main" // The translation key of the keybinding's category.
+        ));
+        var waypointListKeyBind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.hudcompass.waypointlist", // The translation key of the keybinding's name
                 InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
                 GLFW.GLFW_KEY_B, // The keycode of the key
                 "category.hudcompass.main" // The translation key of the keybinding's category.
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(c -> {
-            if (keyBinding.wasPressed()) {
+            if (waypointListKeyBind.wasPressed()) {
                 mc.setScreen(new NewWaypointScreen(mc.currentScreen));
+            }
+            if(newWaypointKeyBind.wasPressed()) {
+                mc.setScreen(new WaypointListScreen(mc.currentScreen));
             }
         });
     }
