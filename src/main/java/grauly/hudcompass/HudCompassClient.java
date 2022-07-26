@@ -35,10 +35,10 @@ public class HudCompassClient implements ClientModInitializer {
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(c -> {
-            if (waypointListKeyBind.wasPressed()) {
+            if (newWaypointKeyBind.wasPressed()) {
                 mc.setScreen(new NewWaypointScreen(mc.currentScreen));
             }
-            if(newWaypointKeyBind.wasPressed()) {
+            if (waypointListKeyBind.wasPressed()) {
                 mc.setScreen(new WaypointListScreen(mc.currentScreen));
             }
         });
