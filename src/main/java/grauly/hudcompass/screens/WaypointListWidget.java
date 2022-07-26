@@ -22,11 +22,19 @@ import java.util.List;
 public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Entry> {
 
     private MinecraftClient mc;
+    private Screen parent;
+    private Screen doneButton;
 
     public WaypointListWidget(Screen parent, MinecraftClient client) {
-        super(client, parent.width + 45, parent.height, 20, parent.height - 32, 20);
+        //client, background width, background height, top margin pos, bottom margin pos, entry height
+        super(client, parent.width, parent.height, 20, parent.height - 35, 25);
         mc = client;
         reloadList();
+    }
+
+    @Override
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        super.render(matrices, mouseX, mouseY, delta);
     }
 
     public void reloadList() {
@@ -45,6 +53,7 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
             HudCompassClient.waypointManager.removeWaypoint(waypoint);
             reloadList();
         });
+
         public WaypointEntry(Waypoint waypoint) {
             this.waypoint = waypoint;
         }
@@ -61,9 +70,10 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            DrawableHelper.drawCenteredText(matrices, mc.textRenderer, waypoint.getName(), x + mc.textRenderer.getWidth(waypoint.getName()), y + entryHeight / 2, -1);
+            DrawableHelper.drawCenteredText(matrices, mc.textRenderer, waypoint.getName(), x + mc.textRenderer.getWidth(waypoint.getName())/2, y + (entryHeight / 2) - mc.textRenderer.fontHeight/2, -1);
             deleteWaypointButton.x = x + entryWidth - 5 - deleteWaypointButton.getWidth();
             deleteWaypointButton.y = y + entryHeight/2 - deleteWaypointButton.getHeight()/2;
+            deleteWaypointButton.render(matrices,mouseX,mouseY,tickDelta);
         }
 
 
