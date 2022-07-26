@@ -1,0 +1,10 @@
+{
+  "key.hudcompass.newpoint": "New Waypoint",
+  "category.hudcompass.main": "Hud Compass",
+  "screen.hudcompass.newwaypoint": "New Waypoint",
+  "screen.hudcompass.newwaypoint.name": "Name",
+  "screen.hudcompass.waypoint.x": "x",
+  "screen.hudcompass.waypoint.y": "y",
+  "screen.hudcompass.waypoint.z": "z"
+
+}
