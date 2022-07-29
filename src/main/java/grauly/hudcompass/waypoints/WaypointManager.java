@@ -77,10 +77,20 @@ public class WaypointManager {
     }
 
     private void saveDataForWorld(String worldID) {
-        var gson = new GsonBuilder().setPrettyPrinting().create();
-        var json = gson.toJson(worldWaypoints);
         var directoryPath = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), DIRECTORY_NAME);
         var path = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), DIRECTORY_NAME, worldID + ".json");
+        try {
+            if(worldWaypoints.getWaypoints().isEmpty()) {
+                if(Files.exists(path)) {
+                    Files.delete(path);
+                }
+            }
+        } catch (IOException e) {
+            HudCompass.LOGGER.info("Failed to delete waypoint file for {}",worldID);
+            e.printStackTrace();
+        }
+        var gson = new GsonBuilder().setPrettyPrinting().create();
+        var json = gson.toJson(worldWaypoints);
         try {
             if (!Files.exists(directoryPath)) {
                 Files.createDirectory(directoryPath);
