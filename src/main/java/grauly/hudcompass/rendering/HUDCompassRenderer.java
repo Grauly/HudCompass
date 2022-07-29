@@ -13,7 +13,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.WorldSavePath;
 
 import java.awt.*;
 import java.util.Collection;
@@ -23,9 +22,11 @@ public class HUDCompassRenderer {
     private static final MinecraftClient mc = MinecraftClient.getInstance();
     private static final Color gray = new Color(0.9f, 0.9f, 0.9f, 0.7f);
     private static final Identifier MAP_ICONS = new Identifier("minecraft", "textures/map/map_icons.png");
+    private static final int MAX_ID = 26;
+
     @Environment(EnvType.CLIENT)
     public static void onRender(MatrixStack matrices, float tickDelta) {
-        if(((PlayerListHudAccessor) mc.inGameHud.getPlayerListHud()).isVisible()) {
+        if (((PlayerListHudAccessor) mc.inGameHud.getPlayerListHud()).isVisible()) {
             return;
         }
         var width = mc.getWindow().getScaledWidth();
@@ -49,10 +50,11 @@ public class HUDCompassRenderer {
     private static void drawWaypoints(MatrixStack matrices, TextRenderer textRenderer, int width, int playerAngle, Collection<Waypoint> waypoints, String currentDimension) {
         var playerPos = mc.player.getPos();
         waypoints.forEach(w -> {
-            if(w.getDimensionID().equals(currentDimension)) {
+            if (!(w.isHidden()) && w.getDimensionID().equals(currentDimension)) {
                 var angle = (int) MathHelper.determineWaypointAngleRelative(playerPos, w);
                 var pos = MathHelper.determineXPosOnCompass(playerAngle, angle);
-                drawCenteredMarker((width / 2) + pos, 12, matrices);
+                drawWaypointMarker((width / 2) + pos, 12, w.getIconID(), matrices);
+                //drawCenteredMarker((width / 2) + pos, 12, matrices);
                 matrices.push();
                 matrices.scale(0.5f, 0.5f, 0);
                 DrawableHelper.drawCenteredText(matrices, textRenderer, w.getName(), ((width / 2) + pos) * 2, (13 - mc.textRenderer.fontHeight / 2) * 2, -1);
@@ -68,5 +70,15 @@ public class HUDCompassRenderer {
     private static void drawCenteredMarker(int centerX, int floorY, MatrixStack matrices) {
         RenderSystem.setShaderTexture(0, MAP_ICONS);
         DrawableHelper.drawTexture(matrices, centerX - 3, floorY - 8, 0, 89, 0, 6, 8, 128, 128);
+    }
+
+    private static void drawWaypointMarker(int centerX, int floorY, int id, MatrixStack matrices) {
+        RenderSystem.setShaderTexture(0, MAP_ICONS);
+        var yOffset = 0;
+        while (id >= 16) {
+            id -= 16;
+            yOffset += 8;
+        }
+        DrawableHelper.drawTexture(matrices, centerX - 4, floorY - 8, 0, id * 8, yOffset, 8, 8, 128, 128);
     }
 }

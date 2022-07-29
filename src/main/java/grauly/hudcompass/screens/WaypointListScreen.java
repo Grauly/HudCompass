@@ -24,7 +24,7 @@ public class WaypointListScreen extends Screen {
     protected void init() {
         var width = mc.getWindow().getScaledWidth();
         var height = mc.getWindow().getScaledWidth();
-        this.addDrawableChild(new ButtonWidget(width/2 + 150,height/2 - 12,50,20, ScreenTexts.DONE,c -> {
+        this.addDrawableChild(new ButtonWidget(width/2 + 150,height/2 - 10,50,20, ScreenTexts.DONE,c -> {
             mc.setScreen(parent);
         }));
         waypointList = new WaypointListWidget(this, mc);

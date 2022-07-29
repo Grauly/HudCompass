@@ -1,6 +1,7 @@
 package grauly.hudcompass.waypoints;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import grauly.hudcompass.HudCompass;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.WorldSavePath;
@@ -52,6 +53,13 @@ public class WaypointManager {
         saveDataForWorld(currentlyLoadedWorld);
     }
 
+    public void hideWaypoint(Waypoint waypoint, boolean hidden) {
+        worldWaypoints.getWaypoints().stream()
+                .filter(w -> w.getWaypointID().equals(waypoint.getWaypointID()))
+                .forEach(w -> w.setHidden(hidden));
+        saveDataForWorld(currentlyLoadedWorld);
+    }
+
     private void loadDataForWorld(String worldID) {
         var path = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), DIRECTORY_NAME, worldID + ".json");
         try {
@@ -69,7 +77,8 @@ public class WaypointManager {
     }
 
     private void saveDataForWorld(String worldID) {
-        var json = new Gson().toJson(worldWaypoints);
+        var gson = new GsonBuilder().setPrettyPrinting().create();
+        var json = gson.toJson(worldWaypoints);
         var directoryPath = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), DIRECTORY_NAME);
         var path = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), DIRECTORY_NAME, worldID + ".json");
         try {
