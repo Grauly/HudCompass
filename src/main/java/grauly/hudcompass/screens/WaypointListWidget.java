@@ -18,13 +18,14 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.awt.*;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Entry> {
 
     private MinecraftClient mc;
-
+    private static final Color gray = new Color(0.9f, 0.9f, 0.9f, 0.7f);
     private static final Identifier visibleTextureIdentifier = new Identifier("minecraft","textures/mob_effect/night_vision.png");
     private static final Identifier hiddenTextureIdentifier = new Identifier("minecraft","textures/mob_effect/blindness.png");
 
@@ -80,7 +81,8 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            DrawableHelper.drawCenteredText(matrices, mc.textRenderer, waypoint.getName(), x + mc.textRenderer.getWidth(waypoint.getName())/2, y + (entryHeight / 2) - mc.textRenderer.fontHeight/2, -1);
+            var textColor = waypoint.isHidden() ? gray.getRGB() : -1;
+            DrawableHelper.drawCenteredText(matrices, mc.textRenderer, waypoint.getName(), x + mc.textRenderer.getWidth(waypoint.getName())/2, y + (entryHeight / 2) - mc.textRenderer.fontHeight/2, textColor);
             deleteWaypointButton.x = x + entryWidth - 5 - deleteWaypointButton.getWidth();
             deleteWaypointButton.y = y + entryHeight/2 - deleteWaypointButton.getHeight()/2;
             deleteWaypointButton.render(matrices,mouseX,mouseY,tickDelta);
