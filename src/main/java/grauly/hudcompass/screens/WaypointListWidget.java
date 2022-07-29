@@ -43,6 +43,12 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
     }
 
     @Override
+    protected int getScrollbarPositionX() {
+        //standard is this.width / 2 + 124
+        return width/2 + 174;
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         super.render(matrices, mouseX, mouseY, delta);
     }
