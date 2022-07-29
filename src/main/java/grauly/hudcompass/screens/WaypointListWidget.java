@@ -3,6 +3,7 @@ package grauly.hudcompass.screens;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import grauly.hudcompass.HudCompassClient;
+import grauly.hudcompass.util.RendererHelper;
 import grauly.hudcompass.waypoints.Waypoint;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -94,7 +95,8 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             var textColor = waypoint.isHidden() ? gray.getRGB() : -1;
-            DrawableHelper.drawCenteredText(matrices, mc.textRenderer, waypoint.getName(), x + mc.textRenderer.getWidth(waypoint.getName())/2, y + (entryHeight / 2) - mc.textRenderer.fontHeight/2, textColor);
+            RendererHelper.drawScaledWaypointIcon(matrices,x + 4, y + (entryHeight/2) + 6,waypoint.getIconID(),2);
+            DrawableHelper.drawCenteredText(matrices, mc.textRenderer, waypoint.getName(), x + mc.textRenderer.getWidth(waypoint.getName())/2 + 16 + 3, y + (entryHeight / 2) - mc.textRenderer.fontHeight/2, textColor);
             deleteWaypointButton.x = x + entryWidth - 5 - deleteWaypointButton.getWidth();
             deleteWaypointButton.y = y + entryHeight/2 - deleteWaypointButton.getHeight()/2;
             deleteWaypointButton.render(matrices,mouseX,mouseY,tickDelta);
