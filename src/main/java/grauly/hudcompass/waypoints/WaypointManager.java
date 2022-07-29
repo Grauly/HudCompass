@@ -73,6 +73,20 @@ public class WaypointManager {
             HudCompass.LOGGER.info("Failed to load waypoint data for {}, assuming none existent", worldID);
             e.printStackTrace();
             worldWaypoints = new WorldWaypoints(getWorldID());
+        } catch (NumberFormatException e) {
+            HudCompass.LOGGER.info("Failed to parse waypoint data for {}, assuming file is corrupt. Backing up old file and starting over", worldID);
+            e.printStackTrace();
+            try {
+                var content = Files.readString(path);
+                var newPath = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), DIRECTORY_NAME, worldID + ".backup");
+                if(!Files.exists(newPath)) {
+                    Files.createFile(newPath);
+                }
+                Files.writeString(newPath,content);
+                HudCompass.LOGGER.info("Successfully saved old data as {}.backup",worldID);
+            } catch (IOException e2) {
+                HudCompass.LOGGER.info("Failed to save old waypoint data for {}, sorry.", worldID);
+            }
         }
     }
 
