@@ -37,6 +37,12 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
     }
 
     @Override
+    public int getRowWidth() {
+        //standard is 220
+        return 320;
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         super.render(matrices, mouseX, mouseY, delta);
     }
