@@ -86,6 +86,7 @@ public class WaypointManager {
                 HudCompass.LOGGER.info("Successfully saved old data as {}.backup",worldID);
             } catch (IOException e2) {
                 HudCompass.LOGGER.info("Failed to save old waypoint data for {}, sorry.", worldID);
+                e2.printStackTrace();
             }
         }
     }
