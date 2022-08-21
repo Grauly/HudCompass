@@ -22,16 +22,16 @@ public class HudCompassClient implements ClientModInitializer {
     public void onInitializeClient() {
         HudRenderCallback.EVENT.register(HUDCompassRenderer::onRender);
         var newWaypointKeyBind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.hudcompass.newpoint", // The translation key of the keybinding's name
-                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-                GLFW.GLFW_KEY_B, // The keycode of the key
-                "category.hudcompass.main" // The translation key of the keybinding's category.
+                "key.hudcompass.newpoint",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_B,
+                "category.hudcompass.main"
         ));
         var waypointListKeyBind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.hudcompass.waypointlist", // The translation key of the keybinding's name
-                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-                GLFW.GLFW_KEY_V, // The keycode of the key
-                "category.hudcompass.main" // The translation key of the keybinding's category.
+                "key.hudcompass.waypointlist",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_V,
+                "category.hudcompass.main"
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(c -> {
