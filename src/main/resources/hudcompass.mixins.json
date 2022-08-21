@@ -6,7 +6,8 @@
   "mixins": [
   ],
   "client": [
-    "PlayerListHudAccessor"
+    "PlayerListHudAccessor",
+    "BossBarHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1
