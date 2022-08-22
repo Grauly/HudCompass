@@ -12,11 +12,11 @@ public abstract class BossBarHudMixin {
 
     @Inject(at = @At("HEAD"), method = "render")
     public void renderMoveDown(MatrixStack matrices, CallbackInfo ci) {
-        matrices.translate(0,30,0);
+        matrices.translate(0,20,0);
     }
 
     @Inject(at = @At("TAIL"), method = "render")
     public void renderResetMove(MatrixStack matrices, CallbackInfo ci) {
-        matrices.translate(0,-30,0);
+        matrices.translate(0,-20,0);
     }
 }
