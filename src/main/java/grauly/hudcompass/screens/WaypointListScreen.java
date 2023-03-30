@@ -24,9 +24,13 @@ public class WaypointListScreen extends Screen {
     protected void init() {
         var width = mc.getWindow().getScaledWidth();
         var height = mc.getWindow().getScaledWidth();
-        this.addDrawableChild(new ButtonWidget(width/2 + 150,height/2 - 10,50,20, ScreenTexts.DONE,c -> {
+        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE,(button -> {mc.setScreen(parent);}))
+                .dimensions(width/2 + 150,height/2 - 10,50,20)
+                .build()
+        );
+        /*this.addDrawableChild(new ButtonWidget(width/2 + 150,height/2 - 10,50,20, ScreenTexts.DONE,c -> {
             mc.setScreen(parent);
-        }));
+        }));*/
         waypointList = new WaypointListWidget(this, mc);
         this.addSelectableChild(waypointList);
     }
@@ -36,7 +40,7 @@ public class WaypointListScreen extends Screen {
         var width = mc.getWindow().getScaledWidth();
         var height = mc.getWindow().getScaledWidth();
         this.waypointList.render(matrices,mouseX,mouseY,delta);
-        DrawableHelper.drawCenteredText(matrices,mc.textRenderer,Text.translatable("screen.hudcompass.waypointlist"),width/2, 6, -1);
+        DrawableHelper.drawCenteredTextWithShadow(matrices,mc.textRenderer,Text.translatable("screen.hudcompass.waypointlist"),width/2, 6, -1);
         super.render(matrices, mouseX, mouseY, delta);
     }
 }

@@ -24,7 +24,7 @@ public class WaypointManager {
     }
 
     public static String getWorldID() {
-        if (mc.getGame().getCurrentSession().isRemoteServer()) {
+        if (mc.getServer().isRemote()) {
             return mc.getCurrentServerEntry().address;
         } else {
             return mc.getServer().getSavePath(WorldSavePath.ROOT).getParent().getFileName().toString();

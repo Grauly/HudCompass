@@ -14,7 +14,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Box;
 
 import java.awt.*;
 import java.util.Collection;
@@ -44,10 +46,10 @@ public class HUDCompassRenderer {
         //DrawableHelper.drawCenteredText(matrices, textRenderer, String.valueOf(angle), width / 2, 22, -1);
         //DrawableHelper.drawCenteredText(matrices, textRenderer, "^", width / 2, 17, -1);
         //DrawableHelper.drawCenteredText(matrices, textRenderer, "|", width / 2, 5, -1);
-        DrawableHelper.drawCenteredText(matrices, textRenderer, "N", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 180)), 5, -1);
-        DrawableHelper.drawCenteredText(matrices, textRenderer, "E", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 90)), 5, -1);
-        DrawableHelper.drawCenteredText(matrices, textRenderer, "S", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 0)), 5, -1);
-        DrawableHelper.drawCenteredText(matrices, textRenderer, "W", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 270)), 5, -1);
+        DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, "N", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 180)), 5, -1);
+        DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, "E", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 90)), 5, -1);
+        DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, "S", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 0)), 5, -1);
+        DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, "W", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 270)), 5, -1);
         drawWaypoints(matrices, textRenderer, width, angle, HudCompassClient.waypointManager.getWaypoints(), WaypointManager.getDimensionID());
     }
 
@@ -60,7 +62,7 @@ public class HUDCompassRenderer {
                 RendererHelper.drawWaypointIcon(matrices,(width / 2) + pos, 12, w.getIconID());
                 matrices.push();
                 matrices.scale(0.5f, 0.5f, 0);
-                DrawableHelper.drawCenteredText(matrices, textRenderer, w.getName(), ((width / 2) + pos) * 2, (13 - mc.textRenderer.fontHeight / 2) * 2, -1);
+                DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, w.getName(), ((width / 2) + pos) * 2, (13 - mc.textRenderer.fontHeight / 2) * 2, -1);
                 matrices.pop();
             }
         });
