@@ -114,7 +114,7 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
             deleteWaypointButton.setY(y + entryHeight/2 - deleteWaypointButton.getHeight()/2);
             deleteWaypointButton.render(matrices,mouseX,mouseY,tickDelta);
             hideWaypointButton.setX(x + entryWidth - 10 - hideWaypointButton.getWidth() - deleteWaypointButton.getWidth());
-            hideWaypointButton.setY( + entryHeight/2 - hideWaypointButton.getHeight()/2);
+            hideWaypointButton.setY(y + entryHeight/2 - hideWaypointButton.getHeight()/2);
             hideWaypointButton.render(matrices,mouseX,mouseY,tickDelta);
             RenderSystem.setShaderTexture(0,waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier);
             DrawableHelper.drawTexture(matrices,hideWaypointButton.getX() + 1,hideWaypointButton.getY() +1,0,0,0,18,18,18,18);
