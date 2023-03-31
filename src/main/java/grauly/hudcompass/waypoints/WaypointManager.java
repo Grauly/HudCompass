@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import grauly.hudcompass.HudCompass;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.util.WorldSavePath;
 
 import java.io.IOException;
@@ -24,8 +25,8 @@ public class WaypointManager {
     }
 
     public static String getWorldID() {
-        if (mc.getServer().isRemote()) {
-            return mc.getCurrentServerEntry().address;
+        if (mc.getNetworkHandler().getConnection() != null) {
+            return mc.getNetworkHandler().getConnection().getAddress().toString();
         } else {
             return mc.getServer().getSavePath(WorldSavePath.ROOT).getParent().getFileName().toString();
         }
