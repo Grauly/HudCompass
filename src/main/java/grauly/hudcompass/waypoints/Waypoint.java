@@ -6,7 +6,7 @@ import net.minecraft.util.math.Vec3d;
 import java.util.UUID;
 
 public class Waypoint {
-    private Vec3d waypoint;
+    private WaypointLocation waypoint;
     private String name;
     private String dimensionID;
     private boolean isHidden;
@@ -14,7 +14,7 @@ public class Waypoint {
     private UUID waypointID;
 
     public Waypoint(Vec3d waypoint, String dimensionID, String name, int iconID) {
-        this.waypoint = waypoint;
+        this.waypoint = WaypointLocation.fromVec3d(waypoint);
         this.name = name;
         this.dimensionID = dimensionID;
         this.iconID = iconID;
@@ -22,7 +22,7 @@ public class Waypoint {
     }
 
     public Waypoint(Vec3d waypoint, String name, String dimensionID, boolean isHidden, int iconID, UUID waypointID) {
-        this.waypoint = waypoint;
+        this.waypoint = WaypointLocation.fromVec3d(waypoint);
         this.name = name;
         this.dimensionID = dimensionID;
         this.isHidden = isHidden;
@@ -51,7 +51,7 @@ public class Waypoint {
     }
 
     public Vec3d getWaypoint() {
-        return waypoint;
+        return waypoint.toVec3d();
     }
 
     public String getName() {
