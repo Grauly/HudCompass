@@ -1,6 +1,5 @@
 package grauly.hudcompass.screens;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import grauly.hudcompass.HudCompassClient;
 import grauly.hudcompass.util.RendererHelper;
@@ -14,7 +13,6 @@ import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -25,15 +23,17 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Entry> {
 
-    private MinecraftClient mc;
     private static final Color gray = new Color(0.9f, 0.9f, 0.9f, 0.7f);
-    private static final Identifier visibleTextureIdentifier = new Identifier("minecraft","textures/mob_effect/night_vision.png");
-    private static final Identifier hiddenTextureIdentifier = new Identifier("minecraft","textures/mob_effect/blindness.png");
+    private static final Identifier visibleTextureIdentifier = new Identifier("minecraft", "textures/mob_effect/night_vision.png");
+    private static final Identifier hiddenTextureIdentifier = new Identifier("minecraft", "textures/mob_effect/blindness.png");
+    private final MinecraftClient mc;
+    private final Screen parent;
 
     public WaypointListWidget(Screen parent, MinecraftClient client) {
         //client, background width, background height, top margin pos, bottom margin pos, entry height
         super(client, parent.width, parent.height, 20, parent.height - 35, 25);
-        mc = client;
+        this.mc = client;
+        this.parent = parent;
         reloadList();
     }
 
@@ -46,7 +46,7 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
     @Override
     protected int getScrollbarPositionX() {
         //standard is this.width / 2 + 124
-        return width/2 + 174;
+        return width / 2 + 174;
     }
 
     @Override
@@ -56,9 +56,14 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
 
     public void reloadList() {
         this.clearEntries();
-        for(Waypoint w : HudCompassClient.waypointManager.getWaypoints()) {
+        for (Waypoint w : HudCompassClient.waypointManager.getWaypoints()) {
             this.addEntry(new WaypointEntry(w));
         }
+    }
+
+    @Environment(EnvType.CLIENT)
+    public abstract static class Entry extends ElementListWidget.Entry<Entry> {
+        //can be empty according to any of the vanilla classes
     }
 
     @Environment(EnvType.CLIENT)
@@ -68,26 +73,22 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
         boolean hidden;
 
         ButtonWidget deleteWaypointButton = ButtonWidget
-                .builder(Text.translatable("screen.hudcompass.waypointlist.delete"),(button -> {
+                .builder(Text.translatable("screen.hudcompass.waypointlist.delete"), button -> {
                     HudCompassClient.waypointManager.removeWaypoint(waypoint);
                     reloadList();
-                }))
+                })
                 .dimensions(0, 0, 48, 20)
                 .build();
-        /*ButtonWidget deleteWaypointButton = new ButtonWidget(0, 0, 48, 20, Text.translatable("screen.hudcompass.waypointlist.delete"), c -> {
-            HudCompassClient.waypointManager.removeWaypoint(waypoint);
-            reloadList();
-        });*/
-
-        /*ButtonWidget hideWaypointButton = new ButtonWidget(0,0,20,20,Text.empty(),c -> {
-            HudCompassClient.waypointManager.hideWaypoint(waypoint, !hidden);
-            reloadList();
-        });*/
         ButtonWidget hideWaypointButton = ButtonWidget
-                .builder(Text.empty(),button -> {
+                .builder(Text.empty(), button -> {
                     HudCompassClient.waypointManager.hideWaypoint(waypoint, !hidden);
                     reloadList();
-                }).dimensions(0,0,20,20)
+                }).dimensions(0, 0, 20, 20)
+                .build();
+        ButtonWidget editWaypointButton = ButtonWidget
+                .builder(Text.translatable("screen.hudcompass.waypointlist.edit"), button -> {
+                    mc.setScreen(new ConfigureWaypointScreen(parent, waypoint));
+                }).dimensions(0, 0, 35, 20)
                 .build();
 
         public WaypointEntry(Waypoint waypoint) {
@@ -97,33 +98,32 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
 
         @Override
         public List<? extends Selectable> selectableChildren() {
-            return List.of(deleteWaypointButton,hideWaypointButton);
+            return List.of(deleteWaypointButton, hideWaypointButton, editWaypointButton);
         }
 
         @Override
         public List<? extends Element> children() {
-            return List.of(deleteWaypointButton,hideWaypointButton);
+            return List.of(deleteWaypointButton, hideWaypointButton, editWaypointButton);
         }
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             var textColor = waypoint.isHidden() ? gray.getRGB() : -1;
-            RendererHelper.drawScaledWaypointIcon(matrices,x + 4, y + (entryHeight/2) + 6,waypoint.getIconID(),2);
-            DrawableHelper.drawCenteredTextWithShadow(matrices, mc.textRenderer, waypoint.getName(), x + mc.textRenderer.getWidth(waypoint.getName())/2 + 16 + 3, y + (entryHeight / 2) - mc.textRenderer.fontHeight/2, textColor);
+            RendererHelper.drawScaledWaypointIcon(matrices, x + 4, y + (entryHeight / 2) + 6, waypoint.getIconID(), 2);
+            DrawableHelper.drawCenteredTextWithShadow(matrices, mc.textRenderer, waypoint.getName(), x + mc.textRenderer.getWidth(waypoint.getName()) / 2 + 16 + 3, y + (entryHeight / 2) - mc.textRenderer.fontHeight / 2, textColor);
             deleteWaypointButton.setX(x + entryWidth - 5 - deleteWaypointButton.getWidth());
-            deleteWaypointButton.setY(y + entryHeight/2 - deleteWaypointButton.getHeight()/2);
-            deleteWaypointButton.render(matrices,mouseX,mouseY,tickDelta);
+            deleteWaypointButton.setY(y + entryHeight / 2 - deleteWaypointButton.getHeight() / 2);
+            deleteWaypointButton.render(matrices, mouseX, mouseY, tickDelta);
             hideWaypointButton.setX(x + entryWidth - 10 - hideWaypointButton.getWidth() - deleteWaypointButton.getWidth());
-            hideWaypointButton.setY(y + entryHeight/2 - hideWaypointButton.getHeight()/2);
-            hideWaypointButton.render(matrices,mouseX,mouseY,tickDelta);
-            RenderSystem.setShaderTexture(0,waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier);
-            DrawableHelper.drawTexture(matrices,hideWaypointButton.getX() + 1,hideWaypointButton.getY() +1,0,0,0,18,18,18,18);
+            hideWaypointButton.setY(y + entryHeight / 2 - hideWaypointButton.getHeight() / 2);
+            hideWaypointButton.render(matrices, mouseX, mouseY, tickDelta);
+            editWaypointButton.setX(x + entryWidth - 15 - hideWaypointButton.getWidth() - deleteWaypointButton.getWidth() - editWaypointButton.getWidth());
+            editWaypointButton.setY(y + entryHeight / 2 - editWaypointButton.getHeight() / 2);
+            editWaypointButton.render(matrices, mouseX, mouseY, tickDelta);
+            RenderSystem.setShaderTexture(0, waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier);
+            DrawableHelper.drawTexture(matrices, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 0, 0, 0, 18, 18, 18, 18);
         }
 
 
-    }
-    @Environment(EnvType.CLIENT)
-    public abstract static class Entry extends ElementListWidget.Entry<Entry> {
-        //can be empty according to any of the vanilla classes
     }
 }

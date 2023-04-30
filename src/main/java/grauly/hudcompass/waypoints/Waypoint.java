@@ -8,10 +8,10 @@ import java.util.UUID;
 public class Waypoint {
     private WaypointLocation waypoint;
     private String name;
-    private String dimensionID;
+    private final String dimensionID;
     private boolean isHidden;
     private int iconID;
-    private UUID waypointID;
+    private final UUID waypointID;
 
     public Waypoint(Vec3d waypoint, String dimensionID, String name, int iconID) {
         this.waypoint = WaypointLocation.fromVec3d(waypoint);
@@ -54,8 +54,16 @@ public class Waypoint {
         return waypoint.toVec3d();
     }
 
+    public void setWaypoint(WaypointLocation waypoint) {
+        this.waypoint = waypoint;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDimensionID() {
@@ -72,6 +80,10 @@ public class Waypoint {
 
     public int getIconID() {
         return iconID;
+    }
+
+    public void setIconID(int iconID) {
+        this.iconID = iconID;
     }
 
     public UUID getWaypointID() {

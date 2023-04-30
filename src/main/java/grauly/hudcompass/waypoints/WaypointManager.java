@@ -25,8 +25,8 @@ public class WaypointManager {
     }
 
     public static String getWorldID() {
-        if (mc.getNetworkHandler().getConnection() != null) {
-            return mc.getNetworkHandler().getConnection().getAddress().toString();
+        if (mc.getCurrentServerEntry() != null) {
+            return mc.getCurrentServerEntry().address;
         } else {
             return mc.getServer().getSavePath(WorldSavePath.ROOT).getParent().getFileName().toString();
         }
@@ -45,6 +45,12 @@ public class WaypointManager {
     }
 
     public void addWaypoint(Waypoint waypoint) {
+        worldWaypoints.getWaypoints().add(waypoint);
+        saveDataForWorld(currentlyLoadedWorld);
+    }
+
+    public void editWaypoint(Waypoint waypoint) {
+        worldWaypoints.getWaypoints().removeIf(w -> w.getWaypointID().equals(waypoint.getWaypointID()));
         worldWaypoints.getWaypoints().add(waypoint);
         saveDataForWorld(currentlyLoadedWorld);
     }

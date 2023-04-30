@@ -3,10 +3,12 @@
   "key.hudcompass.waypointlist": "List Waypoints",
   "category.hudcompass.main": "Hud Compass",
   "screen.hudcompass.newwaypoint": "New Waypoint",
+  "screen.hudcompass.editwaypoint": "Edit Waypoint",
   "screen.hudcompass.newwaypoint.name": "Name",
   "screen.hudcompass.waypoint.x": "x",
   "screen.hudcompass.waypoint.y": "y",
   "screen.hudcompass.waypoint.z": "z",
   "screen.hudcompass.waypointlist": "Waypoints",
-  "screen.hudcompass.waypointlist.delete": "Delete"
+  "screen.hudcompass.waypointlist.delete": "Delete",
+  "screen.hudcompass.waypointlist.edit": "Edit"
 }

@@ -1,7 +1,7 @@
 package grauly.hudcompass;
 
 import grauly.hudcompass.rendering.HUDCompassRenderer;
-import grauly.hudcompass.screens.NewWaypointScreen;
+import grauly.hudcompass.screens.ConfigureWaypointScreen;
 import grauly.hudcompass.screens.WaypointListScreen;
 import grauly.hudcompass.waypoints.WaypointManager;
 import net.fabricmc.api.ClientModInitializer;
@@ -36,7 +36,7 @@ public class HudCompassClient implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(c -> {
             if (newWaypointKeyBind.wasPressed()) {
-                mc.setScreen(new NewWaypointScreen(mc.currentScreen));
+                mc.setScreen(new ConfigureWaypointScreen(mc.currentScreen));
             }
             if (waypointListKeyBind.wasPressed()) {
                 mc.setScreen(new WaypointListScreen(mc.currentScreen));
