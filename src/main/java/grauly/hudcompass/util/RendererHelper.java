@@ -22,13 +22,12 @@ public class RendererHelper {
         offsetX = offsetX - (int) offsetX;
         var offsetY = (floorY / (float) scale);
         offsetY = offsetY - (int) offsetY;
-        context.getMatrices().translate(-offsetX,-offsetY,0);
+        context.getMatrices().translate(-offsetX, -offsetY, 0);
         drawWaypointIcon(context, Math.round(centerX / (float) scale), Math.round(floorY / (float) scale), id);
         context.getMatrices().pop();
     }
 
     public static void drawCenteredTexture(DrawContext context, int centerX, int floorY, int u, int v, int width, int height, int imageWidth, int imageHeight, Identifier texture) {
-        //RenderSystem.setShaderTexture(0, texture);
         context.drawTexture(texture, centerX - width / 2, floorY - height, 0, u, v, width, height, imageWidth, imageHeight);
     }
 }

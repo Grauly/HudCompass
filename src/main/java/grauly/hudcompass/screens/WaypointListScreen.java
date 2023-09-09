@@ -4,7 +4,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
@@ -24,32 +23,21 @@ public class WaypointListScreen extends Screen {
     protected void init() {
         var width = mc.getWindow().getScaledWidth();
         var height = mc.getWindow().getScaledWidth();
-        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE,(button -> {mc.setScreen(parent);}))
-                .dimensions(width/2 + 150,height/2 - 10,50,20)
-                .build()
+        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, (button -> {
+                            mc.setScreen(parent);
+                        }))
+                        .dimensions(width / 2 + 150, height / 2 - 10, 50, 20)
+                        .build()
         );
-        /*this.addDrawableChild(new ButtonWidget(width/2 + 150,height/2 - 10,50,20, ScreenTexts.DONE,c -> {
-            mc.setScreen(parent);
-        }));*/
         waypointList = new WaypointListWidget(this, mc);
         this.addSelectableChild(waypointList);
     }
 
-    /*@Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        var width = mc.getWindow().getScaledWidth();
-        var height = mc.getWindow().getScaledWidth();
-        this.waypointList.render(matrices,mouseX,mouseY,delta);
-        DrawableHelper.drawCenteredTextWithShadow(matrices,mc.textRenderer,Text.translatable("screen.hudcompass.waypointlist"),width/2, 6, -1);
-        super.render(matrices, mouseX, mouseY, delta);
-    }*/
-
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         var width = mc.getWindow().getScaledWidth();
-        var height = mc.getWindow().getScaledWidth();
-        this.waypointList.render(context,mouseX,mouseY,delta);
-        context.drawCenteredTextWithShadow(mc.textRenderer,Text.translatable("screen.hudcompass.waypointlist"),width/2, 6, -1);
+        this.waypointList.render(context, mouseX, mouseY, delta);
+        context.drawCenteredTextWithShadow(mc.textRenderer, Text.translatable("screen.hudcompass.waypointlist"), width / 2, 6, -1);
         super.render(context, mouseX, mouseY, delta);
     }
 }

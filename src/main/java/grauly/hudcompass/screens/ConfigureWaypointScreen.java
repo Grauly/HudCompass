@@ -11,19 +11,20 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.ToggleButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
-import java.util.function.Consumer;
 
 public class ConfigureWaypointScreen extends Screen {
 
     private static final MinecraftClient mc = MinecraftClient.getInstance();
+    private static final int MAX_ICON_ID = 26;
+    private static final Identifier recipeBookTexture = new Identifier("minecraft", "textures/gui/recipe_book.png");
     private final Screen parent;
+    private final Waypoint editWaypoint;
     private TextFieldWidget xCoord;
     private TextFieldWidget yCoord;
     private TextFieldWidget zCoord;
@@ -31,9 +32,6 @@ public class ConfigureWaypointScreen extends Screen {
     private ToggleButtonWidget iconLeftButton;
     private ToggleButtonWidget iconRightButton;
     private int iconID = 11;
-    private final Waypoint editWaypoint;
-    private static final int MAX_ICON_ID = 26;
-    private static final Identifier recipeBookTexture = new Identifier("minecraft","textures/gui/recipe_book.png");
 
 
     public ConfigureWaypointScreen(Screen parent) {
@@ -62,7 +60,7 @@ public class ConfigureWaypointScreen extends Screen {
         zCoord.setChangedListener(s -> doNumberInputCheckFor(zCoord));
 
         waypointName = new TextFieldWidget(mc.textRenderer, xCoord.getX(), height / 2 - 48, 160, 18, Text.translatable("screen.hudcompass.newwaypoint.name"));
-        if(editWaypoint != null) {
+        if (editWaypoint != null) {
             waypointName.setText(editWaypoint.getName());
             xCoord.setText(String.valueOf(editWaypoint.getWaypoint().getX()));
             yCoord.setText(String.valueOf(editWaypoint.getWaypoint().getY()));
@@ -82,7 +80,9 @@ public class ConfigureWaypointScreen extends Screen {
         this.addDrawableChild(waypointName);
 
         this.addDrawableChild(ButtonWidget
-                .builder(ScreenTexts.CANCEL,(button -> {mc.setScreen(parent);}))
+                .builder(ScreenTexts.CANCEL, (button -> {
+                    mc.setScreen(parent);
+                }))
                 .dimensions(width / 2 - 98 - 2, height / 2 + 30, 98, 20)
                 .build());
         this.addDrawableChild(ButtonWidget
@@ -92,7 +92,7 @@ public class ConfigureWaypointScreen extends Screen {
                                 Double.parseDouble(xCoord.getText()),
                                 Double.parseDouble(yCoord.getText()),
                                 Double.parseDouble(zCoord.getText()));
-                        if(editWaypoint != null) {
+                        if (editWaypoint != null) {
                             editWaypoint.setWaypoint(WaypointLocation.fromVec3d(location));
                             editWaypoint.setName(waypointName.getText());
                             editWaypoint.setIconID(iconID);
@@ -114,8 +114,8 @@ public class ConfigureWaypointScreen extends Screen {
                 .build());
 
         var centerX = zCoord.getX() + zCoord.getWidth() / 2;
-        iconLeftButton = new ToggleButtonWidget(centerX - 12 - 3 - 12, waypointName.getY(), 12,17,false);
-        iconRightButton = new ToggleButtonWidget(centerX + 12 + 3, waypointName.getY(), 12,17,false);
+        iconLeftButton = new ToggleButtonWidget(centerX - 12 - 3 - 12, waypointName.getY(), 12, 17, false);
+        iconRightButton = new ToggleButtonWidget(centerX + 12 + 3, waypointName.getY(), 12, 17, false);
         iconLeftButton.setTextureUV(14, 208, 13, 18, recipeBookTexture);
         iconRightButton.setTextureUV(1, 208, 13, 18, recipeBookTexture);
 
@@ -125,40 +125,22 @@ public class ConfigureWaypointScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if(iconLeftButton.mouseClicked(mouseX,mouseY,button)) {
+        if (iconLeftButton.mouseClicked(mouseX, mouseY, button)) {
             iconID--;
-            if(iconID < 0) {
+            if (iconID < 0) {
                 iconID = MAX_ICON_ID;
             }
             return true;
         }
-        if(iconRightButton.mouseClicked(mouseX,mouseY,button)) {
+        if (iconRightButton.mouseClicked(mouseX, mouseY, button)) {
             iconID++;
-            if(iconID > MAX_ICON_ID) {
+            if (iconID > MAX_ICON_ID) {
                 iconID = 0;
             }
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
-
-    /*@Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        var width = mc.getWindow().getScaledWidth();
-        var height = mc.getWindow().getScaledHeight();
-        this.renderBackground(matrices);
-
-        DrawableHelper.drawCenteredTextWithShadow(matrices, mc.textRenderer, "x:", width / 2 - 55 - 70 - 5 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.x").getString() + ":", 100) / 2, -1);
-        DrawableHelper.drawCenteredTextWithShadow(matrices, mc.textRenderer, "y:", width / 2 - 35 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.y").getString() + ":", 100) / 2, -1);
-        DrawableHelper.drawCenteredTextWithShadow(matrices, mc.textRenderer, "z:", width / 2 + 55 + 5 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.z").getString() + ":", 100) / 2, -1);
-        DrawableHelper.drawCenteredTextWithShadow(matrices, mc.textRenderer, Text.translatable("screen.hudcompass.newwaypoint"), width / 2, height / 2 - 66, -1);
-
-        var centerX = zCoord.getX() + zCoord.getWidth() / 2;
-        var floorY = waypointName.getY() + waypointName.getHeight();
-        RendererHelper.drawCenteredTexture(matrices,centerX,floorY + 2,29,206,24,24,256,256,recipeBookTexture);
-        RendererHelper.drawScaledWaypointIcon(matrices, centerX, floorY - 2 , iconID,2);
-        super.render(matrices, mouseX, mouseY, delta);
-    }*/
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -169,22 +151,14 @@ public class ConfigureWaypointScreen extends Screen {
         context.drawCenteredTextWithShadow(mc.textRenderer, "x:", width / 2 - 55 - 70 - 5 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.x").getString() + ":", 100) / 2, -1);
         context.drawCenteredTextWithShadow(mc.textRenderer, "y:", width / 2 - 35 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.y").getString() + ":", 100) / 2, -1);
         context.drawCenteredTextWithShadow(mc.textRenderer, "z:", width / 2 + 55 + 5 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.z").getString() + ":", 100) / 2, -1);
-        context.drawCenteredTextWithShadow( mc.textRenderer, Text.translatable("screen.hudcompass.newwaypoint"), width / 2, height / 2 - 66, -1);
+        context.drawCenteredTextWithShadow(mc.textRenderer, Text.translatable("screen.hudcompass.newwaypoint"), width / 2, height / 2 - 66, -1);
 
         var centerX = zCoord.getX() + zCoord.getWidth() / 2;
         var floorY = waypointName.getY() + waypointName.getHeight();
-        RendererHelper.drawCenteredTexture(context, centerX,floorY + 2,29,206,24,24,256,256,recipeBookTexture);
-        RendererHelper.drawScaledWaypointIcon(context, centerX, floorY - 2 , iconID,2);
+        RendererHelper.drawCenteredTexture(context, centerX, floorY + 2, 29, 206, 24, 24, 256, 256, recipeBookTexture);
+        RendererHelper.drawScaledWaypointIcon(context, centerX, floorY - 2, iconID, 2);
         super.render(context, mouseX, mouseY, delta);
     }
-
-/*@Override
-    public void tick() {
-        doNumberInputCheckFor(xCoord);
-        doNumberInputCheckFor(yCoord);
-        doNumberInputCheckFor(zCoord);
-        super.tick();
-    }*/
 
     private void doNumberInputCheckFor(TextFieldWidget widget) {
         try {
