@@ -7,7 +7,7 @@ import grauly.hudcompass.waypoints.Waypoint;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
@@ -21,7 +21,7 @@ import java.awt.*;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Entry> {
+public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Entry>{
 
     private static final Color gray = new Color(0.9f, 0.9f, 0.9f, 0.7f);
     private static final Identifier visibleTextureIdentifier = new Identifier("minecraft", "textures/mob_effect/night_vision.png");
@@ -49,9 +49,14 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
         return width / 2 + 174;
     }
 
-    @Override
+    /*@Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         super.render(matrices, mouseX, mouseY, delta);
+    }*/
+
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
     }
 
     public void reloadList() {
@@ -106,7 +111,7 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
             return List.of(deleteWaypointButton, hideWaypointButton, editWaypointButton);
         }
 
-        @Override
+        /*@Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             var textColor = waypoint.isHidden() ? gray.getRGB() : -1;
             RendererHelper.drawScaledWaypointIcon(matrices, x + 4, y + (entryHeight / 2) + 6, waypoint.getIconID(), 2);
@@ -122,8 +127,25 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
             editWaypointButton.render(matrices, mouseX, mouseY, tickDelta);
             RenderSystem.setShaderTexture(0, waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier);
             DrawableHelper.drawTexture(matrices, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 0, 0, 0, 18, 18, 18, 18);
+        }*/
+
+
+        @Override
+        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            var textColor = waypoint.isHidden() ? gray.getRGB() : -1;
+            RendererHelper.drawScaledWaypointIcon(context, x + 4, y + (entryHeight / 2) + 6, waypoint.getIconID(), 2);
+            context.drawCenteredTextWithShadow(mc.textRenderer, waypoint.getName(), x + mc.textRenderer.getWidth(waypoint.getName()) / 2 + 16 + 3, y + (entryHeight / 2) - mc.textRenderer.fontHeight / 2, textColor);
+            deleteWaypointButton.setX(x + entryWidth - 5 - deleteWaypointButton.getWidth());
+            deleteWaypointButton.setY(y + entryHeight / 2 - deleteWaypointButton.getHeight() / 2);
+            deleteWaypointButton.render(context, mouseX, mouseY, tickDelta);
+            hideWaypointButton.setX(x + entryWidth - 10 - hideWaypointButton.getWidth() - deleteWaypointButton.getWidth());
+            hideWaypointButton.setY(y + entryHeight / 2 - hideWaypointButton.getHeight() / 2);
+            hideWaypointButton.render(context, mouseX, mouseY, tickDelta);
+            editWaypointButton.setX(x + entryWidth - 15 - hideWaypointButton.getWidth() - deleteWaypointButton.getWidth() - editWaypointButton.getWidth());
+            editWaypointButton.setY(y + entryHeight / 2 - editWaypointButton.getHeight() / 2);
+            editWaypointButton.render(context, mouseX, mouseY, tickDelta);
+            //RenderSystem.setShaderTexture(0, waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier);
+            context.drawTexture(waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 0, 0, 0, 18, 18, 18, 18);
         }
-
-
     }
 }

@@ -1,7 +1,7 @@
 package grauly.hudcompass.screens;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -35,12 +35,21 @@ public class WaypointListScreen extends Screen {
         this.addSelectableChild(waypointList);
     }
 
-    @Override
+    /*@Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         var width = mc.getWindow().getScaledWidth();
         var height = mc.getWindow().getScaledWidth();
         this.waypointList.render(matrices,mouseX,mouseY,delta);
         DrawableHelper.drawCenteredTextWithShadow(matrices,mc.textRenderer,Text.translatable("screen.hudcompass.waypointlist"),width/2, 6, -1);
         super.render(matrices, mouseX, mouseY, delta);
+    }*/
+
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        var width = mc.getWindow().getScaledWidth();
+        var height = mc.getWindow().getScaledWidth();
+        this.waypointList.render(context,mouseX,mouseY,delta);
+        context.drawCenteredTextWithShadow(mc.textRenderer,Text.translatable("screen.hudcompass.waypointlist"),width/2, 6, -1);
+        super.render(context, mouseX, mouseY, delta);
     }
 }
