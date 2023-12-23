@@ -7,6 +7,7 @@ import grauly.hudcompass.waypoints.WaypointLocation;
 import grauly.hudcompass.waypoints.WaypointManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -23,6 +24,8 @@ public class ConfigureWaypointScreen extends Screen {
     private static final MinecraftClient mc = MinecraftClient.getInstance();
     private static final int MAX_ICON_ID = 26;
     private static final Identifier recipeBookTexture = new Identifier("minecraft", "textures/gui/recipe_book.png");
+    private static final ButtonTextures rightButtonTextures = new ButtonTextures(new Identifier("recipe_book/page_forward"), new Identifier("recipe_book/page_forward_highlighted"));
+    private static final ButtonTextures leftButtonTextures = new ButtonTextures(new Identifier("recipe_book/page_backward"), new Identifier("recipe_book/page_backward_highlighted"));
     private final Screen parent;
     private final Waypoint editWaypoint;
     private TextFieldWidget xCoord;
@@ -114,10 +117,11 @@ public class ConfigureWaypointScreen extends Screen {
                 .build());
 
         var centerX = zCoord.getX() + zCoord.getWidth() / 2;
+
         iconLeftButton = new ToggleButtonWidget(centerX - 12 - 3 - 12, waypointName.getY(), 12, 17, false);
         iconRightButton = new ToggleButtonWidget(centerX + 12 + 3, waypointName.getY(), 12, 17, false);
-        iconLeftButton.setTextureUV(14, 208, 13, 18, recipeBookTexture);
-        iconRightButton.setTextureUV(1, 208, 13, 18, recipeBookTexture);
+        iconLeftButton.setTextures(leftButtonTextures);
+        iconRightButton.setTextures(rightButtonTextures);
 
         this.addDrawableChild(iconLeftButton);
         this.addDrawableChild(iconRightButton);
@@ -146,7 +150,7 @@ public class ConfigureWaypointScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         var width = mc.getWindow().getScaledWidth();
         var height = mc.getWindow().getScaledHeight();
-        this.renderBackground(context);
+        super.render(context, mouseX, mouseY, delta);
 
         context.drawCenteredTextWithShadow(mc.textRenderer, "x:", width / 2 - 55 - 70 - 5 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.x").getString() + ":", 100) / 2, -1);
         context.drawCenteredTextWithShadow(mc.textRenderer, "y:", width / 2 - 35 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.y").getString() + ":", 100) / 2, -1);
@@ -157,7 +161,6 @@ public class ConfigureWaypointScreen extends Screen {
         var floorY = waypointName.getY() + waypointName.getHeight();
         RendererHelper.drawCenteredTexture(context, centerX, floorY + 2, 29, 206, 24, 24, 256, 256, recipeBookTexture);
         RendererHelper.drawScaledWaypointIcon(context, centerX, floorY - 2, iconID, 2);
-        super.render(context, mouseX, mouseY, delta);
     }
 
     private void doNumberInputCheckFor(TextFieldWidget widget) {
