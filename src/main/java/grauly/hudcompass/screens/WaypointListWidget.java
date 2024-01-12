@@ -27,9 +27,12 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
     private final MinecraftClient mc;
     private final Screen parent;
 
-    public WaypointListWidget(Screen parent, MinecraftClient client) {
+    public WaypointListWidget(Screen parent, MinecraftClient client, int width, int height) {
         //client, background width, background height, top margin pos, bottom margin pos, entry height
-        super(client, parent.width, parent.height, 20, parent.height - 35, 25);
+        //super(client, parent.width, parent.height, 20, parent.height - 35, 25);
+        //client, background width, background height, top margin pos, entry height
+        //super(client, parent.width, parent.height - WaypointListScreen.BOTTOM_TEXT_HEIGHT, 20, 35);
+        super(client,width,height,20,35);
         this.mc = client;
         this.parent = parent;
         reloadList();
@@ -43,18 +46,7 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
 
     @Override
     protected int getScrollbarPositionX() {
-        //standard is this.width / 2 + 124
-        return width / 2 + 174;
-    }
-
-    /*@Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        super.render(matrices, mouseX, mouseY, delta);
-    }*/
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+        return super.getScrollbarPositionX() + 35;
     }
 
     public void reloadList() {
