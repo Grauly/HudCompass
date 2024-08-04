@@ -23,9 +23,9 @@ public class ConfigureWaypointScreen extends Screen {
 
     private static final MinecraftClient mc = MinecraftClient.getInstance();
     private static final int MAX_ICON_ID = 26;
-    private static final Identifier recipeBookTexture = new Identifier("minecraft", "textures/gui/recipe_book.png");
-    private static final ButtonTextures rightButtonTextures = new ButtonTextures(new Identifier("recipe_book/page_forward"), new Identifier("recipe_book/page_forward_highlighted"));
-    private static final ButtonTextures leftButtonTextures = new ButtonTextures(new Identifier("recipe_book/page_backward"), new Identifier("recipe_book/page_backward_highlighted"));
+    private static final Identifier recipeBookTexture = Identifier.of("minecraft", "textures/gui/recipe_book.png");
+    private static final ButtonTextures rightButtonTextures = new ButtonTextures(Identifier.of("recipe_book/page_forward"), Identifier.of("recipe_book/page_forward_highlighted"));
+    private static final ButtonTextures leftButtonTextures = new ButtonTextures(Identifier.of("recipe_book/page_backward"), Identifier.of("recipe_book/page_backward_highlighted"));
     private final Screen parent;
     private final Waypoint editWaypoint;
     private TextFieldWidget xCoord;

@@ -42,9 +42,4 @@ public class WaypointListScreen extends Screen {
         waypointList.render(context,mouseX,mouseY,delta);
         context.drawCenteredTextWithShadow(mc.textRenderer, Text.translatable("screen.hudcompass.waypointlist"), this.width / 2, 6, -1);
     }
-
-    @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackgroundTexture(context);
-    }
 }

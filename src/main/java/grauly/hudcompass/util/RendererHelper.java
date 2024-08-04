@@ -4,7 +4,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
 public class RendererHelper {
-    private static final Identifier MAP_ICONS = new Identifier("minecraft", "textures/map/map_icons.png");
+    private static final Identifier MAP_ICONS = Identifier.of("minecraft", "textures/map/map_icons.png");
 
     public static void drawWaypointIcon(DrawContext context, int centerX, int floorY, int id) {
         var yOffset = 0;

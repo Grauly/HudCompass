@@ -12,6 +12,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 
 import java.util.Collection;
@@ -19,10 +20,10 @@ import java.util.Collection;
 public class HUDCompassRenderer {
 
     private static final MinecraftClient mc = MinecraftClient.getInstance();
-    private static final Identifier background = new Identifier(HudCompass.MODID, "textures/ui/compass_background.png");
+    private static final Identifier background = Identifier.of(HudCompass.MODID, "textures/ui/compass_background.png");
 
     @Environment(EnvType.CLIENT)
-    public static void onRender(DrawContext context, float tickDelta) {
+    public static void onRender(DrawContext context, RenderTickCounter renderTickCounter) {
         if (((PlayerListHudAccessor) mc.inGameHud.getPlayerListHud()).isVisible()) {
             return;
         }
