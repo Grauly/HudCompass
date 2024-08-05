@@ -22,7 +22,7 @@ import java.awt.*;
 public class ConfigureWaypointScreen extends Screen {
 
     private static final MinecraftClient mc = MinecraftClient.getInstance();
-    private static final int MAX_ICON_ID = 26;
+    private static final int MAX_ICON_ID = RendererHelper.MAP_ICONS.size() - 1;
     private static final Identifier recipeBookTexture = Identifier.of("minecraft", "textures/gui/recipe_book.png");
     private static final ButtonTextures rightButtonTextures = new ButtonTextures(Identifier.of("recipe_book/page_forward"), Identifier.of("recipe_book/page_forward_highlighted"));
     private static final ButtonTextures leftButtonTextures = new ButtonTextures(Identifier.of("recipe_book/page_backward"), Identifier.of("recipe_book/page_backward_highlighted"));
