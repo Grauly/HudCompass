@@ -24,9 +24,8 @@ public class HUDCompassRenderer {
 
     @Environment(EnvType.CLIENT)
     public static void onRender(DrawContext context, RenderTickCounter renderTickCounter) {
-        if (((PlayerListHudAccessor) mc.inGameHud.getPlayerListHud()).isVisible()) {
-            return;
-        }
+        if (mc.options.hudHidden) return;
+        if (((PlayerListHudAccessor) mc.inGameHud.getPlayerListHud()).isVisible()) return;
         var width = mc.getWindow().getScaledWidth();
         var textRenderer = mc.textRenderer;
         var player = mc.player;
