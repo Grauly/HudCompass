@@ -12,6 +12,7 @@ import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -22,8 +23,8 @@ import java.util.List;
 public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Entry> {
 
     private static final Color gray = new Color(0.9f, 0.9f, 0.9f, 0.7f);
-    private static final Identifier visibleTextureIdentifier = Identifier.of("minecraft", "textures/mob_effect/night_vision.png");
-    private static final Identifier hiddenTextureIdentifier = Identifier.of("minecraft", "textures/mob_effect/blindness.png");
+    private static final Identifier visibleTextureIdentifier = Identifier.ofVanilla("textures/mob_effect/night_vision.png");
+    private static final Identifier hiddenTextureIdentifier = Identifier.ofVanilla("textures/mob_effect/blindness.png");
     private final MinecraftClient mc;
     private final Screen parent;
 
@@ -111,7 +112,10 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
             editWaypointButton.setY(y + entryHeight / 2 - editWaypointButton.getHeight() / 2);
             editWaypointButton.render(context, mouseX, mouseY, tickDelta);
             //RenderSystem.setShaderTexture(0, waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier);
-            context.drawTexture(waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 0, 0, 0, 18, 18, 18, 18);
+            Identifier renderTexture = waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier;
+            //context.drawTexture(RenderLayer::getGuiTextured, waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 0, 0, 0, 18, 18, 18, 18);
+            //context.drawGuiTexture(RenderLayer::getGuiTextured, renderTexture, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 18, 18);
+            context.drawTexture(RenderLayer::getGuiTextured, renderTexture, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 0,0, 18, 18, 18, 18);
         }
     }
 }

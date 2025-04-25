@@ -12,6 +12,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 
@@ -31,7 +32,9 @@ public class HUDCompassRenderer {
         var player = mc.player;
         var angle = MathHelper.determineCompassAngle(player);
 
-        context.drawTexture(background, width / 2 - 185, 1, 0, 0, 370, 15, 370, 15);
+        //context.drawGuiTexture(RenderLayer::getGuiTextured, background, width / 2 - 185, 1, 0, 0, 370, 15, 370, 15);
+        //context.drawGuiTexture(RenderLayer::getGuiTextured, background, width / 2 - 185, 1, 370, 15);
+        context.drawTexture(RenderLayer::getGuiTextured, background, width / 2 - 185, 1, 0, 0, 370, 15, 370, 15);
 
         context.drawCenteredTextWithShadow(textRenderer, "N", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 180)), 5, -1);
         context.drawCenteredTextWithShadow(textRenderer, "E", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 90)), 5, -1);

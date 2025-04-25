@@ -1,6 +1,7 @@
 package grauly.hudcompass.util;
 
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class RendererHelper {
 
     public static void drawWaypointIcon(DrawContext context, int centerX, int floorY, int id) {
         Identifier drawTarget = id > MAP_ICONS.size() ? Identifier.of("void") : MAP_ICONS.get(id);
-        context.drawTexture(drawTarget, centerX - 4, floorY - 8, 0, 0, 0, 8, 8, 8, 8);
+        context.drawTexture(RenderLayer::getGuiTextured, drawTarget, centerX - 4, floorY - 8, 0, 0, 8, 8, 8, 8);
     }
 
     public static void drawScaledWaypointIcon(DrawContext context, int centerX, int floorY, int id, int scale) {
@@ -68,6 +69,8 @@ public class RendererHelper {
     }
 
     public static void drawCenteredTexture(DrawContext context, int centerX, int floorY, int u, int v, int width, int height, int imageWidth, int imageHeight, Identifier texture) {
-        context.drawTexture(texture, centerX - width / 2, floorY - height, 0, u, v, width, height, imageWidth, imageHeight);
+        //context.drawTexture(RenderLayer::getGuiTextured, texture, centerX - width / 2, floorY - height, 0, u, v, width, height, imageWidth, imageHeight);
+        //context.drawGuiTexture(RenderLayer::getGuiTextured, texture, centerX - width /2, floorY - height, imageWidth, imageHeight);
+        context.drawTexture(RenderLayer::getGuiTextured, texture, centerX - width / 2, floorY - height, u,v, width, height, imageWidth, imageHeight);
     }
 }
