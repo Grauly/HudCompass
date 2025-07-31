@@ -11,6 +11,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
@@ -32,9 +33,7 @@ public class HUDCompassRenderer {
         var player = mc.player;
         var angle = MathHelper.determineCompassAngle(player);
 
-        //context.drawGuiTexture(RenderLayer::getGuiTextured, background, width / 2 - 185, 1, 0, 0, 370, 15, 370, 15);
-        //context.drawGuiTexture(RenderLayer::getGuiTextured, background, width / 2 - 185, 1, 370, 15);
-        context.drawTexture(RenderLayer::getGuiTextured, background, width / 2 - 185, 1, 0, 0, 370, 15, 370, 15);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, background, width / 2 - 185, 1, 0, 0, 370, 15, 370, 15);
 
         context.drawCenteredTextWithShadow(textRenderer, "N", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 180)), 5, -1);
         context.drawCenteredTextWithShadow(textRenderer, "E", (int) ((width / 2f) + MathHelper.determineXPosOnCompass(angle, 90)), 5, -1);
@@ -50,10 +49,10 @@ public class HUDCompassRenderer {
                 var angle = (int) MathHelper.determineWaypointAngleRelative(playerPos, w);
                 var pos = MathHelper.determineXPosOnCompass(playerAngle, angle);
                 RendererHelper.drawWaypointIcon(context, (width / 2) + pos, 12, w.getIconID());
-                context.getMatrices().push();
-                context.getMatrices().scale(0.5f, 0.5f, 0);
+                context.getMatrices().pushMatrix();
+                context.getMatrices().scale(0.5f, 0.5f);
                 context.drawCenteredTextWithShadow(textRenderer, w.getName(), ((width / 2) + pos) * 2, (13 - mc.textRenderer.fontHeight / 2) * 2, -1);
-                context.getMatrices().pop();
+                context.getMatrices().popMatrix();
             }
         });
     }
