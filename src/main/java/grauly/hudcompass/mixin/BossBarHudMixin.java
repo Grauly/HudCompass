@@ -12,12 +12,12 @@ public abstract class BossBarHudMixin {
 
     @Inject(at = @At("HEAD"), method = "render")
     public void renderMoveDown(DrawContext context, CallbackInfo ci) {
-        context.getMatrices().translate(0, 20, 0);
+        context.getMatrices().translate(0, 20);
     }
 
     @Inject(at = @At("RETURN"), method = "render")
     public void renderResetMove(DrawContext context, CallbackInfo ci) {
-        context.getMatrices().translate(0, -20, 0);
+        context.getMatrices().translate(0, -20);
     }
 
 }
