@@ -1,5 +1,6 @@
 package grauly.hudcompass.util;
 
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
@@ -53,24 +54,22 @@ public class RendererHelper {
 
     public static void drawWaypointIcon(DrawContext context, int centerX, int floorY, int id) {
         Identifier drawTarget = id > MAP_ICONS.size() ? Identifier.of("void") : MAP_ICONS.get(id);
-        context.drawTexture(RenderLayer::getGuiTextured, drawTarget, centerX - 4, floorY - 8, 0, 0, 8, 8, 8, 8);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, drawTarget, centerX - 4, floorY - 8, 0, 0, 8, 8, 8, 8);
     }
 
     public static void drawScaledWaypointIcon(DrawContext context, int centerX, int floorY, int id, int scale) {
-        context.getMatrices().push();
-        context.getMatrices().scale(scale, scale, 1);
+        context.getMatrices().pushMatrix();
+        context.getMatrices().scale(scale, scale);
         var offsetX = (centerX / (float) scale);
         offsetX = offsetX - (int) offsetX;
         var offsetY = (floorY / (float) scale);
         offsetY = offsetY - (int) offsetY;
-        context.getMatrices().translate(-offsetX, -offsetY, 0);
+        context.getMatrices().translate(-offsetX, -offsetY);
         drawWaypointIcon(context, Math.round(centerX / (float) scale), Math.round(floorY / (float) scale), id);
-        context.getMatrices().pop();
+        context.getMatrices().popMatrix();
     }
 
     public static void drawCenteredTexture(DrawContext context, int centerX, int floorY, int u, int v, int width, int height, int imageWidth, int imageHeight, Identifier texture) {
-        //context.drawTexture(RenderLayer::getGuiTextured, texture, centerX - width / 2, floorY - height, 0, u, v, width, height, imageWidth, imageHeight);
-        //context.drawGuiTexture(RenderLayer::getGuiTextured, texture, centerX - width /2, floorY - height, imageWidth, imageHeight);
-        context.drawTexture(RenderLayer::getGuiTextured, texture, centerX - width / 2, floorY - height, u,v, width, height, imageWidth, imageHeight);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, centerX - width / 2, floorY - height, u,v, width, height, imageWidth, imageHeight);
     }
 }
