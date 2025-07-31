@@ -7,9 +7,8 @@ import grauly.hudcompass.waypoints.WaypointManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -24,9 +23,7 @@ public class HudCompassClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        HudLayerRegistrationCallback.EVENT.register(layeredDrawerWrapper -> {
-            layeredDrawerWrapper.attachLayerAfter(IdentifiedLayer.SUBTITLES, COMPASS_LAYER, HUDCompassRenderer::onRender);
-        });
+        HudElementRegistry.attachElementAfter(VanillaHudElements.SUBTITLES, COMPASS_LAYER, HUDCompassRenderer::onRender);
         var newWaypointKeyBind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.hudcompass.newpoint",
                 InputUtil.Type.KEYSYM,
