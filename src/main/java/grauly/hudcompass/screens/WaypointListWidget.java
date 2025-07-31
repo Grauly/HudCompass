@@ -6,6 +6,7 @@ import grauly.hudcompass.waypoints.Waypoint;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -111,11 +112,8 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
             editWaypointButton.setX(x + entryWidth - 15 - hideWaypointButton.getWidth() - deleteWaypointButton.getWidth() - editWaypointButton.getWidth());
             editWaypointButton.setY(y + entryHeight / 2 - editWaypointButton.getHeight() / 2);
             editWaypointButton.render(context, mouseX, mouseY, tickDelta);
-            //RenderSystem.setShaderTexture(0, waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier);
             Identifier renderTexture = waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier;
-            //context.drawTexture(RenderLayer::getGuiTextured, waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 0, 0, 0, 18, 18, 18, 18);
-            //context.drawGuiTexture(RenderLayer::getGuiTextured, renderTexture, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 18, 18);
-            context.drawTexture(RenderLayer::getGuiTextured, renderTexture, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 0,0, 18, 18, 18, 18);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, renderTexture, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 0,0, 18, 18, 18, 18);
         }
     }
 }
