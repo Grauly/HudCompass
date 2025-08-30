@@ -1,8 +1,10 @@
 package grauly.hudcompass.screens;
 
+import grauly.hudcompass.HudCompass;
 import grauly.hudcompass.HudCompassClient;
 import grauly.hudcompass.util.RendererHelper;
 import grauly.hudcompass.waypoints.Waypoint;
+import grauly.hudcompass.waypoints.WaypointManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -16,6 +18,7 @@ import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
 import java.util.List;
@@ -26,6 +29,7 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
     private static final Color gray = new Color(0.9f, 0.9f, 0.9f, 0.7f);
     private static final Identifier visibleTextureIdentifier = Identifier.ofVanilla("textures/mob_effect/night_vision.png");
     private static final Identifier hiddenTextureIdentifier = Identifier.ofVanilla("textures/mob_effect/blindness.png");
+    private static final Identifier otherDimensionIdentifier = Identifier.of(HudCompass.MODID, "textures/ui/other_dimension_indicator.png");
     private final MinecraftClient mc;
     private final Screen parent;
 
@@ -34,7 +38,7 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
         //super(client, parent.width, parent.height, 20, parent.height - 35, 25);
         //client, background width, background height, top margin pos, entry height
         //super(client, parent.width, parent.height - WaypointListScreen.BOTTOM_TEXT_HEIGHT, 20, 35);
-        super(client,width,height,20,35);
+        super(client,width,height,20,25);
         this.mc = client;
         this.parent = parent;
         reloadList();
@@ -82,6 +86,19 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
                     mc.setScreen(new ConfigureWaypointScreen(parent, waypoint));
                 }).dimensions(0, 0, 35, 20)
                 .build();
+        ButtonWidget teleportWaypointButton = ButtonWidget
+                .builder(Text.translatable("screen.hudcompass.waypointlist.teleport"), button -> {
+                    Vec3d point = waypoint.getWaypoint();
+                    var isSameDimension = waypoint.getDimensionID().equals(WaypointManager.getDimensionID());
+                    String command;
+                    if (isSameDimension) {
+                        command = "tp " + point.x + " " + point.y + " " + point.z;
+                    } else {
+                        command = "execute in " + waypoint.getDimensionID() + " run tp " + point.x + " " + point.y + " " + point.z;
+                    }
+                    mc.getNetworkHandler().sendChatCommand(command);
+                }).dimensions(0, 0, 56, 20)
+                .build();
 
         public WaypointEntry(Waypoint waypoint) {
             this.waypoint = waypoint;
@@ -90,17 +107,21 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
 
         @Override
         public List<? extends Selectable> selectableChildren() {
-            return List.of(deleteWaypointButton, hideWaypointButton, editWaypointButton);
+            return List.of(deleteWaypointButton, hideWaypointButton, editWaypointButton, teleportWaypointButton);
         }
 
         @Override
         public List<? extends Element> children() {
-            return List.of(deleteWaypointButton, hideWaypointButton, editWaypointButton);
+            return List.of(deleteWaypointButton, hideWaypointButton, editWaypointButton, teleportWaypointButton);
         }
 
         @Override
         public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             var textColor = waypoint.isHidden() ? gray.getRGB() : -1;
+            var isSameDimension = waypoint.getDimensionID().equals(WaypointManager.getDimensionID());
+            if (!isSameDimension) {
+                RendererHelper.drawCenteredTexture(context, x - 10, y + (entryHeight / 2) + 6, 0,0,16, 16, 16, 16, otherDimensionIdentifier);
+            }
             RendererHelper.drawScaledWaypointIcon(context, x + 4, y + (entryHeight / 2) + 6, waypoint.getIconID(), 2);
             context.drawCenteredTextWithShadow(mc.textRenderer, waypoint.getName(), x + mc.textRenderer.getWidth(waypoint.getName()) / 2 + 16 + 3, y + (entryHeight / 2) - mc.textRenderer.fontHeight / 2, textColor);
             deleteWaypointButton.setX(x + entryWidth - 5 - deleteWaypointButton.getWidth());
@@ -112,6 +133,9 @@ public class WaypointListWidget extends ElementListWidget<WaypointListWidget.Ent
             editWaypointButton.setX(x + entryWidth - 15 - hideWaypointButton.getWidth() - deleteWaypointButton.getWidth() - editWaypointButton.getWidth());
             editWaypointButton.setY(y + entryHeight / 2 - editWaypointButton.getHeight() / 2);
             editWaypointButton.render(context, mouseX, mouseY, tickDelta);
+            teleportWaypointButton.setX(x + entryWidth - 25 - hideWaypointButton.getWidth() - deleteWaypointButton.getWidth() - editWaypointButton.getWidth() - teleportWaypointButton.getWidth());
+            teleportWaypointButton.setY(y + entryHeight / 2 - editWaypointButton.getHeight() / 2);
+            teleportWaypointButton.render(context, mouseX, mouseY, tickDelta);
             Identifier renderTexture = waypoint.isHidden() ? hiddenTextureIdentifier : visibleTextureIdentifier;
             context.drawTexture(RenderPipelines.GUI_TEXTURED, renderTexture, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 0,0, 18, 18, 18, 18);
         }

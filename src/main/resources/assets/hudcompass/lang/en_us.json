@@ -10,5 +10,6 @@
   "screen.hudcompass.waypoint.z": "z",
   "screen.hudcompass.waypointlist": "Waypoints",
   "screen.hudcompass.waypointlist.delete": "Delete",
-  "screen.hudcompass.waypointlist.edit": "Edit"
+  "screen.hudcompass.waypointlist.edit": "Edit",
+  "screen.hudcompass.waypointlist.teleport": "Teleport"
 }
