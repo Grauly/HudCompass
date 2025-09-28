@@ -28,27 +28,7 @@ public class HudCompassClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         HudElementRegistry.attachElementAfter(VanillaHudElements.SUBTITLES, COMPASS_LAYER, HUDCompassRenderer::onRender);
-        var newWaypointKeyBind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.hudcompass.newpoint",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_B,
-                "category.hudcompass.main"
-        ));
-        var waypointListKeyBind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.hudcompass.waypointlist",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_V,
-                "category.hudcompass.main"
-        ));
-
-        ClientTickEvents.END_CLIENT_TICK.register(c -> {
-            if (newWaypointKeyBind.wasPressed()) {
-                mc.setScreen(new ConfigureWaypointScreen(mc.currentScreen));
-            }
-            if (waypointListKeyBind.wasPressed()) {
-                mc.setScreen(new WaypointListScreen(mc.currentScreen));
-            }
-        });
+        KeyBindings.init();
         ResourceLoader.get(ResourceType.CLIENT_RESOURCES).registerReloader(
                 Identifier.of(HudCompass.MODID, "icons"),
                 ICON_STORE
