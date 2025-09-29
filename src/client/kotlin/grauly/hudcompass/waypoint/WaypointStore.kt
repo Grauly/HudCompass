@@ -3,7 +3,10 @@ package grauly.hudcompass.waypoint
 import grauly.hudcompass.HudCompassClient
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.toast.AdvancementToast
+import net.minecraft.client.toast.SystemToast
 import net.minecraft.client.world.ClientWorld
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.WorldSavePath
 import java.util.*
@@ -46,7 +49,7 @@ object WaypointStore {
 
     private fun updateWorldAndDimensionId(client: MinecraftClient, newWorld: ClientWorld) {
         dimensionId = newWorld.registryKey.value
-        worldId = client.currentServerEntry?.address ?: client.server?.getSavePath(WorldSavePath.ROOT)?.fileName.toString()
+        worldId = client.currentServerEntry?.address ?: client.server?.getSavePath(WorldSavePath.ROOT)?.parent?.fileName.toString()
         HudCompassClient.logger.info("changing dimensionId to: $dimensionId and worldId to $worldId")
     }
 }
