@@ -8,7 +8,5 @@ import net.minecraft.util.Identifier
 interface Waypoint {
     fun getLocation(): WaypointLocation
     fun shouldShow(dimensionId: Identifier): Boolean
-    fun getIconRenderer(): WaypointIconRenderer
-
-    fun toRenderState(): WaypointRenderState = WaypointRenderState(getLocation(), getIconRenderer())
+    fun extractRenderState(): WaypointRenderState
 }
