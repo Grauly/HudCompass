@@ -21,7 +21,6 @@ public class HudCompassClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         HudElementRegistry.attachElementAfter(VanillaHudElements.SUBTITLES, COMPASS_LAYER, HUDCompassRenderer::onRender);
-        KeyBindings.init();
         ResourceLoader.get(ResourceType.CLIENT_RESOURCES).registerReloader(
                 Identifier.of(HudCompass.MODID, "icons"),
                 ICON_STORE
