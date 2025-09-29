@@ -49,11 +49,13 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 }
 
-processResources {
+processClientResources {
 	inputs.property "version", project.version
+	inputs.property "loader_version", project.loader_version
+	inputs.property "minecraft_version", project.minecraft_version
 
 	filesMatching("fabric.mod.json") {
-		expand "version": inputs.properties.version
+		expand( "version": inputs.properties.version, "loader_version": inputs.properties.loader_version, "minecraft_version": inputs.properties.minecraft_version)
 	}
 }
 
