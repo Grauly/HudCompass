@@ -16,13 +16,19 @@
   "license": "MIT",
   "icon": "assets/hudcompass/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
-      "grauly.hudcompass.HudCompass"
-    ],
     "client": [
-      "grauly.hudcompass.HudCompassClient"
+      {
+        "value": "grauly.hudcompass.HudCompassClient",
+        "adapter": "kotlin"
+      }
+    ],
+    "fabric-datagen": [
+      {
+        "value": "grauly.hudcompass.HudCompassDatagen",
+        "adapter": "kotlin"
+      }
     ]
   },
   "mixins": [
