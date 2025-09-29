@@ -1,7 +1,5 @@
 package grauly.hudcompass
 
-import grauly.hudcompass.screens.ConfigureWaypointScreen
-import grauly.hudcompass.screens.waypointlist.WaypointListScreen
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.option.KeyBinding
@@ -10,7 +8,7 @@ import net.minecraft.util.Identifier
 import org.lwjgl.glfw.GLFW
 
 object KeyBindings {
-    val MAIN: KeyBinding.Category = KeyBinding.Category.create(Identifier.of(HudCompass.MODID, "main"))
+    val MAIN: KeyBinding.Category = KeyBinding.Category.create(Identifier.of(HudCompassClient.MODID, "main"))
     val NEW_WAYPOINT: KeyBinding = KeyBinding(
         "key.hudcompass.newpoint",
         InputUtil.Type.KEYSYM,
