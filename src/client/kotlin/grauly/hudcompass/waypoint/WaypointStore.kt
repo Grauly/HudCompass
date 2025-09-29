@@ -27,8 +27,8 @@ object WaypointStore {
             .values
             .map { it.getWaypoints(worldId, localDimensionId).toMutableList() }
             .reduce { acc, waypoints -> acc.addAll(waypoints); acc }
-            .filter { it.getDimensionId() == localDimensionId }
-            .map { it.toRenderState() }
+            .filter { it.shouldShow(localDimensionId) }
+            .map { it.extractRenderState() }
     }
 
     fun registerProvider(identifier: Identifier, provider: WaypointProvider, enabled: Boolean = true) {
