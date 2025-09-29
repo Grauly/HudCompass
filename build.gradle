@@ -34,6 +34,8 @@ loom {
 fabricApi {
 	configureDataGeneration {
 		client = true
+		createSourceSet = true
+		modId = "hudcompass-datagen"
 	}
 }
 
