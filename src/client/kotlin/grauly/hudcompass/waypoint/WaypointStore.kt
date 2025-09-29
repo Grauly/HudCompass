@@ -3,10 +3,7 @@ package grauly.hudcompass.waypoint
 import grauly.hudcompass.HudCompassClient
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.toast.AdvancementToast
-import net.minecraft.client.toast.SystemToast
 import net.minecraft.client.world.ClientWorld
-import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.WorldSavePath
 import java.util.*
@@ -26,7 +23,8 @@ object WaypointStore {
         return waypointProviders
             .filterKeys { enabledProviders.contains(it) }
             .values
-            .map { it.getWaypoints(localDimensionId) }
+            .map { it.getWaypoints(worldId, localDimensionId).toMutableList() }
+            .reduce { acc, waypoints -> acc.addAll(waypoints); acc }
             .filter { it.getDimensionId() == localDimensionId }
             .map { it.toRenderState() }
     }
