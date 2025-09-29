@@ -1,5 +1,6 @@
 package grauly.hudcompass
 
+import grauly.hudcompass.waypoint.WaypointStore
 import net.fabricmc.api.ClientModInitializer
 import org.slf4j.LoggerFactory
 
@@ -8,5 +9,6 @@ object HudCompassClient : ClientModInitializer {
 	val logger = LoggerFactory.getLogger(MODID)
 	override fun onInitializeClient() {
 		KeyBindings.init()
+		WaypointStore
 	}
 }
