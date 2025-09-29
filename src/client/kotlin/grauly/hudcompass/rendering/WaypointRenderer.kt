@@ -1,6 +1,6 @@
 package grauly.hudcompass.rendering
 
-import grauly.hudcompass.waypoint.WaypointLocation
+import grauly.hudcompass.waypoint.location.WaypointLocation
 import net.minecraft.client.gui.DrawContext
 
 interface WaypointRenderer {

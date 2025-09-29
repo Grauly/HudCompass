@@ -1,5 +1,6 @@
-package grauly.hudcompass.waypoint
+package grauly.hudcompass.waypoint.provider
 
+import grauly.hudcompass.waypoint.Waypoint
 import net.minecraft.util.Identifier
 
 interface WaypointProvider {

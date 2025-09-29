@@ -1,6 +1,6 @@
-package grauly.hudcompass.waypoint
+package grauly.hudcompass.rendering
 
-import grauly.hudcompass.rendering.WaypointIconRenderer
+import grauly.hudcompass.waypoint.location.WaypointLocation
 
 data class WaypointRenderState(
     val location: WaypointLocation,

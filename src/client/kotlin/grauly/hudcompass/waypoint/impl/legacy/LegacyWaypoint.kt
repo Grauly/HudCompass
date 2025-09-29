@@ -1,7 +1,7 @@
-package grauly.hudcompass.waypoint.legacy
+package grauly.hudcompass.waypoint.impl.legacy
 
 
-import grauly.hudcompass.waypoint.StaticWaypointLocation
+import grauly.hudcompass.waypoint.location.StaticWaypointLocation
 import java.util.*
 
 

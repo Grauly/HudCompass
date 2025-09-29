@@ -1,6 +1,8 @@
 package grauly.hudcompass.waypoint
 
 import grauly.hudcompass.HudCompassClient
+import grauly.hudcompass.waypoint.provider.WaypointProvider
+import grauly.hudcompass.rendering.WaypointRenderState
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld

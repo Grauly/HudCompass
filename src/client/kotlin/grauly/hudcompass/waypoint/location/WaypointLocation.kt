@@ -1,4 +1,4 @@
-package grauly.hudcompass.waypoint
+package grauly.hudcompass.waypoint.location
 
 import net.minecraft.util.math.Vec3d
 
