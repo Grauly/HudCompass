@@ -1,7 +1,7 @@
 package grauly.hudcompass;
 
 import grauly.hudcompass.screens.ConfigureWaypointScreen;
-import grauly.hudcompass.screens.WaypointListScreen;
+import grauly.hudcompass.screens.waypointlist.WaypointListScreen;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;

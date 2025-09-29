@@ -43,7 +43,7 @@ public class HUDCompassRenderer {
     }
 
     private static void drawWaypoints(DrawContext context, TextRenderer textRenderer, int width, int playerAngle, Collection<Waypoint> waypoints, String currentDimension) {
-        var playerPos = mc.player.getPos();
+        var playerPos = mc.player.getEntityPos();
         waypoints.forEach(w -> {
             if (!(w.isHidden()) && w.getDimensionID().equals(currentDimension)) {
                 var angle = (int) MathHelper.determineWaypointAngleRelative(playerPos, w);

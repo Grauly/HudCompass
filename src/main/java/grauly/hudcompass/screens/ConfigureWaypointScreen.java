@@ -127,6 +127,7 @@ public class ConfigureWaypointScreen extends Screen {
         this.addDrawableChild(iconRightButton);
     }
 
+/*
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (iconLeftButton.mouseClicked(mouseX, mouseY, button)) {
@@ -145,6 +146,7 @@ public class ConfigureWaypointScreen extends Screen {
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
+*/
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
