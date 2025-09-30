@@ -27,5 +27,7 @@ data class WaypointRenderState(
 
     companion object {
         val NAME: RenderStateDataKey<String> = RenderStateDataKey.create()
+        val NAME_COLOR: RenderStateDataKey<Int> = RenderStateDataKey.create()
+        val DISTANCE_COLOR: RenderStateDataKey<Int> = RenderStateDataKey.create()
     }
 }
