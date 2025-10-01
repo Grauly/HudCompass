@@ -42,26 +42,37 @@ class HudCompassConfig: WrappedConfig() {
     }
 
     class CompassPositioning: Section {
+        @Comment("The screen positon from which the offset is taken")
         var anchor: AnchorPositions = AnchorPositions.TOP_CENTER
         var offsetX: Int = 0
         var offsetY: Int = 0
     }
 
     class WaypointSources: Section {
+        @Comment("Under which conditions to show lodestone compass' locations on the compass")
         var lodestoneCompasses: ItemWaypointProviderMode = ItemWaypointProviderMode.IN_INVENTORY
+        @Comment("Under which conditions to show marked map locations on the compass")
         var mapDecorations: ItemWaypointProviderMode = ItemWaypointProviderMode.IN_INVENTORY
+        @Comment("Under which conditions to show the recovery compass's target on the compass")
         var recoveryCompass: ItemWaypointProviderMode = ItemWaypointProviderMode.IN_INVENTORY
     }
 
     class LocatorBarSettings: Section {
+        @Comment("Whether to disable the locator bar")
         var disableLocatorBar: Boolean = true
+        @Comment("Whether to show locator bar waypoints on the compass")
         var showOnCompass: Boolean = true
     }
 
     class DeathPoints: Section {
+        @Comment("Whether to track death points")
         var enabled: Boolean = false
+        @Comment("How many death points should be saved, before old ones get removed")
+        @IntegerRange(min = 1, max = 1024)
         var amountOfDeathsSaved: Int = 5
+        @Comment("Whether death points should be automatically deleted if the player gets close enough to it")
         var autoClearDeathPoints: Boolean = true
+        @Comment("The Distance how close a player needs to get to get a deathpoint cleared")
         var autoClearRadius: Int = 5
     }
 
