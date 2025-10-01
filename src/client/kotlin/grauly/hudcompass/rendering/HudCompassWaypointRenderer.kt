@@ -16,19 +16,20 @@ class HudCompassWaypointRenderer: WaypointRenderer {
         centerX: Int,
         centerY: Int
     ) {
-        TODO("Not yet implemented")
+        renderCenteredIcon(drawContext, renderState, distance, angle, angleOffset, centerX, centerY)
+        
     }
 
     companion object {
         fun renderCenteredDistance(
             drawContext: DrawContext,
-            iconRenderState: WaypointRenderState,
+            renderState: WaypointRenderState,
             client: MinecraftClient,
             distance: Double,
             centerX: Int,
             centerY: Int
         ) {
-            val color = iconRenderState.getData(WaypointRenderState.DISTANCE_COLOR) ?: -1
+            val color = renderState.getData(WaypointRenderState.DISTANCE_COLOR) ?: -1
             drawContext.drawCenteredTextWithShadow(
                 client.textRenderer,
                 Text.literal(distance.toInt().toString()),
@@ -40,7 +41,7 @@ class HudCompassWaypointRenderer: WaypointRenderer {
 
         fun renderCenteredIcon(
             drawContext: DrawContext,
-            iconRenderState: WaypointRenderState,
+            renderState: WaypointRenderState,
             distance: Double,
             angle: Double,
             angleOffset: Double,
@@ -49,7 +50,7 @@ class HudCompassWaypointRenderer: WaypointRenderer {
         ) {
             drawContext.drawGuiTexture(
                 RenderPipelines.GUI_TEXTURED,
-                iconRenderState.iconProvider.getIcon(distance, angle, angleOffset),
+                renderState.iconProvider.getIcon(distance, angle, angleOffset),
                 centerX - 4, centerY + 4,
                 8, 8
             )
@@ -57,14 +58,14 @@ class HudCompassWaypointRenderer: WaypointRenderer {
 
         fun renderCenteredName(
             drawContext: DrawContext,
-            iconRenderState: WaypointRenderState,
+            renderState: WaypointRenderState,
             client: MinecraftClient,
             centerX: Int,
             centerY: Int
         ) {
-            val name = iconRenderState.getData(WaypointRenderState.Companion.NAME)
+            val name = renderState.getData(WaypointRenderState.Companion.NAME)
             if (name == null) return
-            val color = iconRenderState.getData(WaypointRenderState.Companion.NAME_COLOR) ?: -1
+            val color = renderState.getData(WaypointRenderState.Companion.NAME_COLOR) ?: -1
             drawContext.drawCenteredTextWithShadow(
                 client.textRenderer,
                 Text.literal(name),
