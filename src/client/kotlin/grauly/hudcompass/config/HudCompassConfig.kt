@@ -13,6 +13,7 @@ class HudCompassConfig: WrappedConfig() {
 
     var compassSpecifics: CompassSpecifics = CompassSpecifics()
     var compassStyling: CompassStyling = CompassStyling()
+    var compassPositioning: CompassPositioning = CompassPositioning()
     var waypointSources: WaypointSources = WaypointSources()
     var locatorBarSettings: LocatorBarSettings = LocatorBarSettings()
     var deathPoints: DeathPoints = DeathPoints()
@@ -38,6 +39,12 @@ class HudCompassConfig: WrappedConfig() {
         @Comment("Needs to be a valid Identifier")
         @Comment("Will default to the default renderer in case of any errors")
         var waypointStyle: String = Identifier.of(HudCompassClient.MODID, "default").toString()
+    }
+
+    class CompassPositioning: Section {
+        var anchor: AnchorPositions = AnchorPositions.TOP_CENTER
+        var offsetX: Int = 0
+        var offsetY: Int = 0
     }
 
     class WaypointSources: Section {
