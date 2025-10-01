@@ -6,6 +6,7 @@ import grauly.hudcompass.waypoints.Waypoint;
 import grauly.hudcompass.waypoints.WaypointLocation;
 import grauly.hudcompass.waypoints.WaypointManager;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.screen.Screen;
@@ -127,26 +128,24 @@ public class ConfigureWaypointScreen extends Screen {
         this.addDrawableChild(iconRightButton);
     }
 
-/*
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (iconLeftButton.mouseClicked(mouseX, mouseY, button)) {
+    public boolean mouseClicked(Click click, boolean doubled) {
+        if (iconLeftButton.mouseClicked(click, doubled)) {
             iconID--;
             if (iconID < 0) {
                 iconID = MAX_ICON_ID;
             }
             return true;
         }
-        if (iconRightButton.mouseClicked(mouseX, mouseY, button)) {
+        if (iconRightButton.mouseClicked(click, doubled)) {
             iconID++;
             if (iconID > MAX_ICON_ID) {
                 iconID = 0;
             }
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(click, doubled);
     }
-*/
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
