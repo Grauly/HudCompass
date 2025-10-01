@@ -33,11 +33,11 @@ class HudCompassConfig: WrappedConfig() {
     class CompassStyling: Section {
         @Comment("What CompassRenderer is picked for rendering")
         @Comment("Needs to be a valid Identifier")
-        @Comment("Will default to the default renderer in case of any errors")
+        @Comment("Will default to hudcompass:default in case of any errors")
         var barStyle: String = Identifier.of(HudCompassClient.MODID, "default").toString()
         @Comment("What WaypointRenderer is picked for rendering")
         @Comment("Needs to be a valid Identifier")
-        @Comment("Will default to the default renderer in case of any errors")
+        @Comment("Will default to hudcompass:default in case of any errors")
         var waypointStyle: String = Identifier.of(HudCompassClient.MODID, "default").toString()
     }
 
