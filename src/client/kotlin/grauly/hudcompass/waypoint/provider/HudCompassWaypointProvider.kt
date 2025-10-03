@@ -7,18 +7,23 @@ import net.minecraft.util.Identifier
 import java.util.Collections
 import java.util.UUID
 
-class HudCompassWaypointProvider: WaypointProvider {
-    private var cachedWorldWaypoints: Map<UUID, HudCompassWaypoint> = mutableMapOf()
+class HudCompassWaypointProvider: WritebackWaypointProvider<HudCompassWaypoint> {
+    private var cachedWorldWaypoints: MutableMap<UUID, HudCompassWaypoint> = mutableMapOf()
 
     override fun getWaypoints(
         worldId: String?,
         dimensionId: Identifier?
-    ): Collection<Waypoint> {
+    ): Collection<HudCompassWaypoint> {
         worldId ?: return Collections.emptySet()
         dimensionId ?: return Collections.emptySet()
 
         return cachedWorldWaypoints.values
             .filter { it.dimensionId == dimensionId }
+    }
+
+    override fun updateWaypoint(waypoint: HudCompassWaypoint) {
+        cachedWorldWaypoints[waypoint.uuid] = waypoint
+        //TODO: save and load from file
     }
 
     companion object {
