@@ -1,7 +1,7 @@
 package grauly.hudcompass.waypoint.impl
 
-import grauly.hudcompass.rendering.StaticWaypointIconProvider
-import grauly.hudcompass.rendering.WaypointRenderState
+import grauly.hudcompass.rendering.waypoint.StaticWaypointIconProvider
+import grauly.hudcompass.rendering.waypoint.WaypointRenderState
 import grauly.hudcompass.waypoint.Waypoint
 import grauly.hudcompass.waypoint.location.StaticWaypointLocation
 import grauly.hudcompass.waypoint.location.WaypointLocation

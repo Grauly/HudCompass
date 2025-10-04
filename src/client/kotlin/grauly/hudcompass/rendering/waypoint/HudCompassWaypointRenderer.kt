@@ -1,11 +1,14 @@
-package grauly.hudcompass.rendering
+package grauly.hudcompass.rendering.waypoint
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gl.RenderPipelines
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 
-class HudCompassWaypointRenderer: WaypointRenderer {
+class HudCompassWaypointRenderer(
+    val showName: Boolean,
+    val showDistance: Boolean,
+) : WaypointRenderer {
     override fun render(
         drawContext: DrawContext,
         renderState: WaypointRenderState,
@@ -17,10 +20,29 @@ class HudCompassWaypointRenderer: WaypointRenderer {
         centerY: Int
     ) {
         renderCenteredIcon(drawContext, renderState, distance, angle, angleOffset, centerX, centerY)
-        
+        if (showName) renderCenteredNameTopAnchor(drawContext, renderState, client, centerX, centerY + 2)
+        if (showDistance) renderCenteredDistance(drawContext, renderState, client, distance, centerX, centerY)
     }
 
     companion object {
+        fun renderCenteredDistanceTopAnchor(
+            drawContext: DrawContext,
+            renderState: WaypointRenderState,
+            client: MinecraftClient,
+            distance: Double,
+            centerX: Int,
+            centerY: Int
+        ) {
+            renderCenteredDistance(
+                drawContext,
+                renderState,
+                client,
+                distance,
+                centerX,
+                centerY + client.textRenderer.fontHeight
+            )
+        }
+
         fun renderCenteredDistance(
             drawContext: DrawContext,
             renderState: WaypointRenderState,
@@ -56,6 +78,16 @@ class HudCompassWaypointRenderer: WaypointRenderer {
             )
         }
 
+        fun renderCenteredNameTopAnchor(
+            drawContext: DrawContext,
+            renderState: WaypointRenderState,
+            client: MinecraftClient,
+            centerX: Int,
+            centerY: Int
+        ) {
+            renderCenteredName(drawContext, renderState, client, centerX, centerY + client.textRenderer.fontHeight)
+        }
+
         fun renderCenteredName(
             drawContext: DrawContext,
             renderState: WaypointRenderState,
@@ -70,7 +102,7 @@ class HudCompassWaypointRenderer: WaypointRenderer {
                 client.textRenderer,
                 Text.literal(name),
                 centerX,
-                centerY + client.textRenderer.fontHeight / 2,
+                centerY,
                 color
             )
         }

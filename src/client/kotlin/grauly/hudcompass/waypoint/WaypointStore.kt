@@ -2,7 +2,7 @@ package grauly.hudcompass.waypoint
 
 import grauly.hudcompass.HudCompassClient
 import grauly.hudcompass.waypoint.provider.WaypointProvider
-import grauly.hudcompass.rendering.WaypointRenderState
+import grauly.hudcompass.rendering.waypoint.WaypointRenderState
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
@@ -11,7 +11,7 @@ import net.minecraft.util.WorldSavePath
 import java.util.*
 
 object WaypointStore {
-    private val waypointProviders: MutableMap<Identifier, WaypointProvider> = mutableMapOf()
+    private val waypointProviders: MutableMap<Identifier, WaypointProvider<*>> = mutableMapOf()
     private val enabledProviders: MutableList<Identifier> = mutableListOf()
     private var dimensionId: Identifier? = null
     private var worldId: String? = null;
@@ -31,7 +31,7 @@ object WaypointStore {
             .map { it.extractRenderState() }
     }
 
-    fun registerProvider(identifier: Identifier, provider: WaypointProvider, enabled: Boolean = true) {
+    fun registerProvider(identifier: Identifier, provider: WaypointProvider<*>, enabled: Boolean = true) {
         if (waypointProviders.contains(identifier)) throw IllegalArgumentException("Provider with ID: $identifier is already registered.")
         waypointProviders[identifier] = provider
         if (enabled) {

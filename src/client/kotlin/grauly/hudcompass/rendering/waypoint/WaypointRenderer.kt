@@ -1,4 +1,4 @@
-package grauly.hudcompass.rendering
+package grauly.hudcompass.rendering.waypoint
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext

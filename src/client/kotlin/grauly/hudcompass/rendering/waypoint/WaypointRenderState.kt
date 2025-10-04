@@ -1,4 +1,4 @@
-package grauly.hudcompass.rendering
+package grauly.hudcompass.rendering.waypoint
 
 import grauly.hudcompass.waypoint.location.WaypointLocation
 import net.fabricmc.fabric.api.client.rendering.v1.RenderStateDataKey

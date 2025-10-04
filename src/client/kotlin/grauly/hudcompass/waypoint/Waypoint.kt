@@ -1,7 +1,7 @@
 package grauly.hudcompass.waypoint
 
 import grauly.hudcompass.waypoint.location.WaypointLocation
-import grauly.hudcompass.rendering.WaypointRenderState
+import grauly.hudcompass.rendering.waypoint.WaypointRenderState
 import net.minecraft.util.Identifier
 
 interface Waypoint {
