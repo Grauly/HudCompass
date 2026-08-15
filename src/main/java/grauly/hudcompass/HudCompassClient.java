@@ -7,23 +7,23 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.resources.Identifier;
 
 public class HudCompassClient implements ClientModInitializer {
 
     public static final WaypointManager waypointManager = new WaypointManager();
-    public static final MinecraftClient mc = MinecraftClient.getInstance();
+    public static final Minecraft mc = Minecraft.getInstance();
     public static final IconStore ICON_STORE = new IconStore();
-    public static final Identifier COMPASS_LAYER = Identifier.of(HudCompass.MODID, "compass");
+    public static final Identifier COMPASS_LAYER = Identifier.fromNamespaceAndPath(HudCompass.MODID, "compass");
 
     @Override
     public void onInitializeClient() {
         HudElementRegistry.attachElementAfter(VanillaHudElements.SUBTITLES, COMPASS_LAYER, HUDCompassRenderer::onRender);
         KeyBindings.init();
-        ResourceLoader.get(ResourceType.CLIENT_RESOURCES).registerReloader(
-                Identifier.of(HudCompass.MODID, "icons"),
+        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(
+                Identifier.fromNamespaceAndPath(HudCompass.MODID, "icons"),
                 ICON_STORE
         );
     }

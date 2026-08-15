@@ -1,14 +1,14 @@
 package grauly.hudcompass.waypoints;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 
 public record WaypointLocation(double x, double y, double z) {
 
-    public Vec3d toVec3d() {
-        return new Vec3d(x, y, z);
+    public Vec3 toVec3d() {
+        return new Vec3(x, y, z);
     }
 
-    public static WaypointLocation fromVec3d(Vec3d vec3d) {
-        return new WaypointLocation(vec3d.getX(), vec3d.getY(), vec3d.getZ());
+    public static WaypointLocation fromVec3d(Vec3 vec3d) {
+        return new WaypointLocation(vec3d.x(), vec3d.y(), vec3d.z());
     }
 }

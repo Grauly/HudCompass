@@ -1,9 +1,9 @@
 package grauly.hudcompass.util;
 
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class RendererHelper {
     public static final ArrayList<Identifier> MAP_ICONS = new ArrayList<>();
 
     private static void addIcon(String id) {
-        MAP_ICONS.add(Identifier.ofVanilla("textures/map/decorations/" + id + ".png"));
+        MAP_ICONS.add(Identifier.withDefaultNamespace("textures/map/decorations/" + id + ".png"));
     }
 
     static {
@@ -52,24 +52,24 @@ public class RendererHelper {
         addIcon("trial_chambers");
     }
 
-    public static void drawWaypointIcon(DrawContext context, int centerX, int floorY, int id) {
-        Identifier drawTarget = id > MAP_ICONS.size() ? Identifier.of("void") : MAP_ICONS.get(id);
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, drawTarget, centerX - 4, floorY - 8, 0, 0, 8, 8, 8, 8);
+    public static void drawWaypointIcon(GuiGraphics context, int centerX, int floorY, int id) {
+        Identifier drawTarget = id > MAP_ICONS.size() ? Identifier.parse("void") : MAP_ICONS.get(id);
+        context.blit(RenderPipelines.GUI_TEXTURED, drawTarget, centerX - 4, floorY - 8, 0, 0, 8, 8, 8, 8);
     }
 
-    public static void drawScaledWaypointIcon(DrawContext context, int centerX, int floorY, int id, int scale) {
-        context.getMatrices().pushMatrix();
-        context.getMatrices().scale(scale, scale);
+    public static void drawScaledWaypointIcon(GuiGraphics context, int centerX, int floorY, int id, int scale) {
+        context.pose().pushMatrix();
+        context.pose().scale(scale, scale);
         var offsetX = (centerX / (float) scale);
         offsetX = offsetX - (int) offsetX;
         var offsetY = (floorY / (float) scale);
         offsetY = offsetY - (int) offsetY;
-        context.getMatrices().translate(-offsetX, -offsetY);
+        context.pose().translate(-offsetX, -offsetY);
         drawWaypointIcon(context, Math.round(centerX / (float) scale), Math.round(floorY / (float) scale), id);
-        context.getMatrices().popMatrix();
+        context.pose().popMatrix();
     }
 
-    public static void drawCenteredTexture(DrawContext context, int centerX, int floorY, int u, int v, int width, int height, int imageWidth, int imageHeight, Identifier texture) {
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, centerX - width / 2, floorY - height, u,v, width, height, imageWidth, imageHeight);
+    public static void drawCenteredTexture(GuiGraphics context, int centerX, int floorY, int u, int v, int width, int height, int imageWidth, int imageHeight, Identifier texture) {
+        context.blit(RenderPipelines.GUI_TEXTURED, texture, centerX - width / 2, floorY - height, u,v, width, height, imageWidth, imageHeight);
     }
 }

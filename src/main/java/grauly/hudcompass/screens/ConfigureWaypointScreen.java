@@ -5,100 +5,100 @@ import grauly.hudcompass.util.RendererHelper;
 import grauly.hudcompass.waypoints.Waypoint;
 import grauly.hudcompass.waypoints.WaypointLocation;
 import grauly.hudcompass.waypoints.WaypointManager;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ButtonTextures;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.TexturedButtonWidget;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.phys.Vec3;
 
 import java.awt.*;
 
 public class ConfigureWaypointScreen extends Screen {
 
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
+    private static final Minecraft mc = Minecraft.getInstance();
     private static final int MAX_ICON_ID = RendererHelper.MAP_ICONS.size() - 1;
-    private static final Identifier recipeBookTexture = Identifier.of("minecraft", "textures/gui/recipe_book.png");
-    private static final ButtonTextures rightButtonTextures = new ButtonTextures(Identifier.of("recipe_book/page_forward"), Identifier.of("recipe_book/page_forward_highlighted"));
-    private static final ButtonTextures leftButtonTextures = new ButtonTextures(Identifier.of("recipe_book/page_backward"), Identifier.of("recipe_book/page_backward_highlighted"));
+    private static final Identifier recipeBookTexture = Identifier.fromNamespaceAndPath("minecraft", "textures/gui/recipe_book.png");
+    private static final WidgetSprites rightButtonTextures = new WidgetSprites(Identifier.parse("recipe_book/page_forward"), Identifier.parse("recipe_book/page_forward_highlighted"));
+    private static final WidgetSprites leftButtonTextures = new WidgetSprites(Identifier.parse("recipe_book/page_backward"), Identifier.parse("recipe_book/page_backward_highlighted"));
     private final Screen parent;
     private final Waypoint editWaypoint;
-    private TextFieldWidget xCoord;
-    private TextFieldWidget yCoord;
-    private TextFieldWidget zCoord;
-    private TextFieldWidget waypointName;
-    private TexturedButtonWidget iconLeftButton;
-    private TexturedButtonWidget iconRightButton;
+    private EditBox xCoord;
+    private EditBox yCoord;
+    private EditBox zCoord;
+    private EditBox waypointName;
+    private ImageButton iconLeftButton;
+    private ImageButton iconRightButton;
     private int iconID = 11;
 
 
     public ConfigureWaypointScreen(Screen parent) {
-        super(Text.translatable("screen.hudcompass.newwaypoint"));
+        super(Component.translatable("screen.hudcompass.newwaypoint"));
         this.parent = parent;
         this.editWaypoint = null;
     }
 
     public ConfigureWaypointScreen(Screen parent, Waypoint editPoint) {
-        super(Text.translatable("screen.hudcompass.editwaypoint"));
+        super(Component.translatable("screen.hudcompass.editwaypoint"));
         this.parent = parent;
         this.editWaypoint = editPoint;
     }
 
     @Override
     protected void init() {
-        var width = mc.getWindow().getScaledWidth();
-        var height = mc.getWindow().getScaledHeight();
+        var width = mc.getWindow().getGuiScaledWidth();
+        var height = mc.getWindow().getGuiScaledHeight();
 
-        xCoord = new TextFieldWidget(mc.textRenderer, width / 2 - 55 - 70 - 5, height / 2 - 9, 70, 18, Text.translatable("screen.hudcompass.waypoint.x"));
-        yCoord = new TextFieldWidget(mc.textRenderer, width / 2 - 35, height / 2 - 9, 70, 18, Text.translatable("screen.hudcompass.waypoint.y"));
-        zCoord = new TextFieldWidget(mc.textRenderer, width / 2 + 55 + 5, height / 2 - 9, 70, 18, Text.translatable("screen.hudcompass.waypoint.z"));
+        xCoord = new EditBox(mc.font, width / 2 - 55 - 70 - 5, height / 2 - 9, 70, 18, Component.translatable("screen.hudcompass.waypoint.x"));
+        yCoord = new EditBox(mc.font, width / 2 - 35, height / 2 - 9, 70, 18, Component.translatable("screen.hudcompass.waypoint.y"));
+        zCoord = new EditBox(mc.font, width / 2 + 55 + 5, height / 2 - 9, 70, 18, Component.translatable("screen.hudcompass.waypoint.z"));
 
-        xCoord.setChangedListener(s -> doNumberInputCheckFor(xCoord));
-        yCoord.setChangedListener(s -> doNumberInputCheckFor(yCoord));
-        zCoord.setChangedListener(s -> doNumberInputCheckFor(zCoord));
+        xCoord.setResponder(s -> doNumberInputCheckFor(xCoord));
+        yCoord.setResponder(s -> doNumberInputCheckFor(yCoord));
+        zCoord.setResponder(s -> doNumberInputCheckFor(zCoord));
 
-        waypointName = new TextFieldWidget(mc.textRenderer, xCoord.getX(), height / 2 - 48, 160, 18, Text.translatable("screen.hudcompass.newwaypoint.name"));
+        waypointName = new EditBox(mc.font, xCoord.getX(), height / 2 - 48, 160, 18, Component.translatable("screen.hudcompass.newwaypoint.name"));
         if (editWaypoint != null) {
-            waypointName.setText(editWaypoint.getName());
-            xCoord.setText(String.valueOf(editWaypoint.getWaypoint().getX()));
-            yCoord.setText(String.valueOf(editWaypoint.getWaypoint().getY()));
-            zCoord.setText(String.valueOf(editWaypoint.getWaypoint().getZ()));
+            waypointName.setValue(editWaypoint.getName());
+            xCoord.setValue(String.valueOf(editWaypoint.getWaypoint().x()));
+            yCoord.setValue(String.valueOf(editWaypoint.getWaypoint().y()));
+            zCoord.setValue(String.valueOf(editWaypoint.getWaypoint().z()));
             iconID = editWaypoint.getIconID();
         } else {
-            var pos = mc.player.getBlockPos();
-            xCoord.setText(String.valueOf(pos.getX()));
-            yCoord.setText(String.valueOf(pos.getY()));
-            zCoord.setText(String.valueOf(pos.getZ()));
-            waypointName.setText(pos.toShortString());
+            var pos = mc.player.blockPosition();
+            xCoord.setValue(String.valueOf(pos.getX()));
+            yCoord.setValue(String.valueOf(pos.getY()));
+            zCoord.setValue(String.valueOf(pos.getZ()));
+            waypointName.setValue(pos.toShortString());
         }
 
-        this.addDrawableChild(xCoord);
-        this.addDrawableChild(yCoord);
-        this.addDrawableChild(zCoord);
-        this.addDrawableChild(waypointName);
+        this.addRenderableWidget(xCoord);
+        this.addRenderableWidget(yCoord);
+        this.addRenderableWidget(zCoord);
+        this.addRenderableWidget(waypointName);
 
-        this.addDrawableChild(ButtonWidget
-                .builder(ScreenTexts.CANCEL, (button -> {
+        this.addRenderableWidget(Button
+                .builder(CommonComponents.GUI_CANCEL, (button -> {
                     mc.setScreen(parent);
                 }))
-                .dimensions(width / 2 - 98 - 2, height / 2 + 30, 98, 20)
+                .bounds(width / 2 - 98 - 2, height / 2 + 30, 98, 20)
                 .build());
-        this.addDrawableChild(ButtonWidget
-                .builder(ScreenTexts.PROCEED, (button) -> {
+        this.addRenderableWidget(Button
+                .builder(CommonComponents.GUI_PROCEED, (button) -> {
                     try {
-                        Vec3d location = new Vec3d(
-                                Double.parseDouble(xCoord.getText()),
-                                Double.parseDouble(yCoord.getText()),
-                                Double.parseDouble(zCoord.getText()));
+                        Vec3 location = new Vec3(
+                                Double.parseDouble(xCoord.getValue()),
+                                Double.parseDouble(yCoord.getValue()),
+                                Double.parseDouble(zCoord.getValue()));
                         if (editWaypoint != null) {
                             editWaypoint.setWaypoint(WaypointLocation.fromVec3d(location));
-                            editWaypoint.setName(waypointName.getText());
+                            editWaypoint.setName(waypointName.getValue());
                             editWaypoint.setIconID(iconID);
                             HudCompassClient.waypointManager.editWaypoint(editWaypoint);
                         } else {
@@ -106,7 +106,7 @@ public class ConfigureWaypointScreen extends Screen {
                                     new Waypoint(
                                             location,
                                             WaypointManager.getDimensionID(),
-                                            waypointName.getText(),
+                                            waypointName.getValue(),
                                             iconID));
                         }
                     } catch (NumberFormatException e) {
@@ -114,38 +114,38 @@ public class ConfigureWaypointScreen extends Screen {
                     }
                     mc.setScreen(parent);
                 })
-                .dimensions(width / 2 + 2, height / 2 + 30, 98, 20)
+                .bounds(width / 2 + 2, height / 2 + 30, 98, 20)
                 .build());
 
         var centerX = zCoord.getX() + zCoord.getWidth() / 2;
 
-        iconLeftButton = new TexturedButtonWidget(centerX - 12 - 3 - 12, waypointName.getY(), 12, 17, leftButtonTextures, (widget) -> {
+        iconLeftButton = new ImageButton(centerX - 12 - 3 - 12, waypointName.getY(), 12, 17, leftButtonTextures, (widget) -> {
             iconID--;
             if (iconID < 0) {
                 iconID = MAX_ICON_ID;
             }
         });
-        iconRightButton = new TexturedButtonWidget(centerX + 12 + 3, waypointName.getY(), 12, 17, rightButtonTextures, (widget) -> {
+        iconRightButton = new ImageButton(centerX + 12 + 3, waypointName.getY(), 12, 17, rightButtonTextures, (widget) -> {
             iconID++;
             if (iconID > MAX_ICON_ID) {
                 iconID = 0;
             }
         });
 
-        this.addDrawableChild(iconLeftButton);
-        this.addDrawableChild(iconRightButton);
+        this.addRenderableWidget(iconLeftButton);
+        this.addRenderableWidget(iconRightButton);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        var width = mc.getWindow().getScaledWidth();
-        var height = mc.getWindow().getScaledHeight();
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
+        var width = mc.getWindow().getGuiScaledWidth();
+        var height = mc.getWindow().getGuiScaledHeight();
         super.render(context, mouseX, mouseY, delta);
 
-        context.drawCenteredTextWithShadow(mc.textRenderer, "x:", width / 2 - 55 - 70 - 5 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.x").append(":"), 100) / 2, -1);
-        context.drawCenteredTextWithShadow(mc.textRenderer, "y:", width / 2 - 35 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.y").append(":"), 100) / 2, -1);
-        context.drawCenteredTextWithShadow(mc.textRenderer, "z:", width / 2 + 55 + 5 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.z").append(":"), 100) / 2, -1);
-        context.drawCenteredTextWithShadow(mc.textRenderer, Text.translatable("screen.hudcompass.newwaypoint"), width / 2, height / 2 - 66, -1);
+        context.drawCenteredString(mc.font, "x:", width / 2 - 55 - 70 - 5 - 10, height / 2 - font.wordWrapHeight(Component.translatable("screen.hudcompass.waypoint.x").append(":"), 100) / 2, -1);
+        context.drawCenteredString(mc.font, "y:", width / 2 - 35 - 10, height / 2 - font.wordWrapHeight(Component.translatable("screen.hudcompass.waypoint.y").append(":"), 100) / 2, -1);
+        context.drawCenteredString(mc.font, "z:", width / 2 + 55 + 5 - 10, height / 2 - font.wordWrapHeight(Component.translatable("screen.hudcompass.waypoint.z").append(":"), 100) / 2, -1);
+        context.drawCenteredString(mc.font, Component.translatable("screen.hudcompass.newwaypoint"), width / 2, height / 2 - 66, -1);
 
         var centerX = zCoord.getX() + zCoord.getWidth() / 2;
         var floorY = waypointName.getY() + waypointName.getHeight();
@@ -153,12 +153,12 @@ public class ConfigureWaypointScreen extends Screen {
         RendererHelper.drawScaledWaypointIcon(context, centerX, floorY - 2, iconID, 2);
     }
 
-    private void doNumberInputCheckFor(TextFieldWidget widget) {
+    private void doNumberInputCheckFor(EditBox widget) {
         try {
-            Float.parseFloat(widget.getText());
-            widget.setEditableColor(Color.white.getRGB());
+            Float.parseFloat(widget.getValue());
+            widget.setTextColor(Color.white.getRGB());
         } catch (NumberFormatException e) {
-            widget.setEditableColor(Color.red.getRGB());
+            widget.setTextColor(Color.red.getRGB());
         }
     }
 }

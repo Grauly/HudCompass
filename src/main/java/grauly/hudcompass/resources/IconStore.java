@@ -6,9 +6,10 @@ import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.resource.v1.reloader.SimpleResourceReloader;
-import net.minecraft.resource.Resource;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.server.packs.resources.PreparableReloadListener.SharedState;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.ExtraCodecs;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -20,16 +21,16 @@ public class IconStore extends SimpleResourceReloader<Map<Identifier, IconStore.
     private List<IdentifiedIconData> orderChache = new ArrayList<>();
 
     @Override
-    protected Map<Identifier, IconData> prepare(Store store) {
-        var resourceManager = store.getResourceManager();
-        Map<Identifier, List<Resource>> foundResources = resourceManager.findAllResources("icons", id -> id.getPath().split("/")[0].equals("icons"));
+    protected Map<Identifier, IconData> prepare(SharedState store) {
+        var resourceManager = store.resourceManager();
+        Map<Identifier, List<Resource>> foundResources = resourceManager.listResourceStacks("icons", id -> id.getPath().split("/")[0].equals("icons"));
         //I had hoped it would not come to this
         Gson gson = new Gson();
         Map<Identifier, IconData> foundData = new HashMap<>();
         foundResources.forEach((id, resources) -> {
             var optionalResource = resourceManager.getResource(id);
             if (optionalResource.isEmpty()) return;
-            try (Reader reader = optionalResource.get().getReader()) {
+            try (Reader reader = optionalResource.get().openAsReader()) {
                 foundData.put(id, gson.fromJson(reader, IconParsingData.class).toData());
             } catch (IOException | JsonIOException e) {
                 throw new RuntimeException("Failed to read: " + id.toString(), e);
@@ -41,7 +42,7 @@ public class IconStore extends SimpleResourceReloader<Map<Identifier, IconStore.
     }
 
     @Override
-    protected void apply(Map<Identifier, IconData> identifierIconDataMap, Store store) {
+    protected void apply(Map<Identifier, IconData> identifierIconDataMap, SharedState store) {
         iconCache = identifierIconDataMap;
         orderChache = iconCache.entrySet().stream()
                 .map(entry -> entry.getValue().toIdentified(entry.getKey()))
@@ -71,7 +72,7 @@ public class IconStore extends SimpleResourceReloader<Map<Identifier, IconStore.
     record IconData(Identifier texture, int showAfter) {
         public static Codec<IconData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Identifier.CODEC.fieldOf("texture").forGetter(IconData::texture),
-                Codecs.NON_NEGATIVE_INT.fieldOf("showAfter").forGetter(IconData::showAfter)
+                ExtraCodecs.NON_NEGATIVE_INT.fieldOf("showAfter").forGetter(IconData::showAfter)
         ).apply(instance, IconData::new));
 
         public IdentifiedIconData toIdentified(Identifier identifier) {

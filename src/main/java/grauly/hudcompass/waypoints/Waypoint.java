@@ -1,7 +1,7 @@
 package grauly.hudcompass.waypoints;
 
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
@@ -13,7 +13,7 @@ public class Waypoint {
     private int iconID;
     private final UUID waypointID;
 
-    public Waypoint(Vec3d waypoint, String dimensionID, String name, int iconID) {
+    public Waypoint(Vec3 waypoint, String dimensionID, String name, int iconID) {
         this.waypoint = WaypointLocation.fromVec3d(waypoint);
         this.name = name;
         this.dimensionID = dimensionID;
@@ -21,7 +21,7 @@ public class Waypoint {
         waypointID = UUID.randomUUID();
     }
 
-    public Waypoint(Vec3d waypoint, String name, String dimensionID, boolean isHidden, int iconID, UUID waypointID) {
+    public Waypoint(Vec3 waypoint, String name, String dimensionID, boolean isHidden, int iconID, UUID waypointID) {
         this.waypoint = WaypointLocation.fromVec3d(waypoint);
         this.name = name;
         this.dimensionID = dimensionID;
@@ -50,7 +50,7 @@ public class Waypoint {
         return waypointID.hashCode();
     }
 
-    public Vec3d getWaypoint() {
+    public Vec3 getWaypoint() {
         return waypoint.toVec3d();
     }
 

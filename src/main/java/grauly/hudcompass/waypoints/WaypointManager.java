@@ -3,9 +3,9 @@ package grauly.hudcompass.waypoints;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import grauly.hudcompass.HudCompass;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.util.WorldSavePath;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.world.level.storage.LevelResource;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,20 +15,20 @@ import java.util.Objects;
 
 public class WaypointManager {
 
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
+    private static final Minecraft mc = Minecraft.getInstance();
     private static final String DIRECTORY_NAME = "hudCompassWaypoints";
     private WorldWaypoints worldWaypoints;
     private String currentlyLoadedWorld = null;
 
     public static String getDimensionID() {
-        return mc.world.getRegistryKey().getValue().toString();
+        return mc.level.dimension().identifier().toString();
     }
 
     public static String getWorldID() {
-        if (mc.getCurrentServerEntry() != null) {
-            return mc.getCurrentServerEntry().address;
+        if (mc.getCurrentServer() != null) {
+            return mc.getCurrentServer().ip;
         } else {
-            return mc.getServer().getSavePath(WorldSavePath.ROOT).getParent().getFileName().toString();
+            return mc.getSingleplayerServer().getWorldPath(LevelResource.ROOT).getParent().getFileName().toString();
         }
     }
 
@@ -68,7 +68,7 @@ public class WaypointManager {
     }
 
     private void loadDataForWorld(String worldID) {
-        var path = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), DIRECTORY_NAME, worldID + ".json");
+        var path = Path.of(Minecraft.getInstance().gameDirectory.getAbsolutePath(), DIRECTORY_NAME, worldID + ".json");
         try {
             if (Files.exists(path)) {
                 var content = Files.readString(path);
@@ -85,7 +85,7 @@ public class WaypointManager {
             e.printStackTrace();
             try {
                 var content = Files.readString(path);
-                var newPath = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), DIRECTORY_NAME, worldID + ".backup");
+                var newPath = Path.of(Minecraft.getInstance().gameDirectory.getAbsolutePath(), DIRECTORY_NAME, worldID + ".backup");
                 if(!Files.exists(newPath)) {
                     Files.createFile(newPath);
                 }
@@ -99,8 +99,8 @@ public class WaypointManager {
     }
 
     private void saveDataForWorld(String worldID) {
-        var directoryPath = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), DIRECTORY_NAME);
-        var path = Path.of(MinecraftClient.getInstance().runDirectory.getAbsolutePath(), DIRECTORY_NAME, worldID + ".json");
+        var directoryPath = Path.of(Minecraft.getInstance().gameDirectory.getAbsolutePath(), DIRECTORY_NAME);
+        var path = Path.of(Minecraft.getInstance().gameDirectory.getAbsolutePath(), DIRECTORY_NAME, worldID + ".json");
         try {
             if(worldWaypoints.getWaypoints().isEmpty()) {
                 if(Files.exists(path)) {
