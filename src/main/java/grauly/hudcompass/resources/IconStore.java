@@ -5,8 +5,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.fabricmc.fabric.api.resource.v1.reloader.SimpleResourceReloader;
-import net.minecraft.server.packs.resources.PreparableReloadListener.SharedState;
+import net.fabricmc.fabric.api.resource.v1.reloader.SimpleReloadListener;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
@@ -15,7 +14,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 
-public class IconStore extends SimpleResourceReloader<Map<Identifier, IconStore.IconData>> {
+public class IconStore extends SimpleReloadListener<Map<Identifier, IconStore.IconData>> {
 
     private Map<Identifier, IconData> iconCache = new HashMap<>();
     private List<IdentifiedIconData> orderChache = new ArrayList<>();

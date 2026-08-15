@@ -22,7 +22,7 @@ public class HudCompassClient implements ClientModInitializer {
     public void onInitializeClient() {
         HudElementRegistry.attachElementAfter(VanillaHudElements.SUBTITLES, COMPASS_LAYER, HUDCompassRenderer::onRender);
         KeyBindings.init();
-        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloader(
+        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(
                 Identifier.fromNamespaceAndPath(HudCompass.MODID, "icons"),
                 ICON_STORE
         );

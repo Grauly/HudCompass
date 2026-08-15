@@ -1,8 +1,7 @@
 package grauly.hudcompass.util;
 
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
@@ -52,12 +51,12 @@ public class RendererHelper {
         addIcon("trial_chambers");
     }
 
-    public static void drawWaypointIcon(GuiGraphics context, int centerX, int floorY, int id) {
+    public static void drawWaypointIcon(GuiGraphicsExtractor context, int centerX, int floorY, int id) {
         Identifier drawTarget = id > MAP_ICONS.size() ? Identifier.parse("void") : MAP_ICONS.get(id);
         context.blit(RenderPipelines.GUI_TEXTURED, drawTarget, centerX - 4, floorY - 8, 0, 0, 8, 8, 8, 8);
     }
 
-    public static void drawScaledWaypointIcon(GuiGraphics context, int centerX, int floorY, int id, int scale) {
+    public static void drawScaledWaypointIcon(GuiGraphicsExtractor context, int centerX, int floorY, int id, int scale) {
         context.pose().pushMatrix();
         context.pose().scale(scale, scale);
         var offsetX = (centerX / (float) scale);
@@ -69,7 +68,7 @@ public class RendererHelper {
         context.pose().popMatrix();
     }
 
-    public static void drawCenteredTexture(GuiGraphics context, int centerX, int floorY, int u, int v, int width, int height, int imageWidth, int imageHeight, Identifier texture) {
+    public static void drawCenteredTexture(GuiGraphicsExtractor context, int centerX, int floorY, int u, int v, int width, int height, int imageWidth, int imageHeight, Identifier texture) {
         context.blit(RenderPipelines.GUI_TEXTURED, texture, centerX - width / 2, floorY - height, u,v, width, height, imageWidth, imageHeight);
     }
 }

@@ -8,14 +8,15 @@ import grauly.hudcompass.waypoints.WaypointManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class WaypointEntry extends WaypointListWidget.Entry {
     }
 
     @Override
-    public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    public void extractContent(@NonNull GuiGraphicsExtractor context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         int x = getContentX();
         int y = getContentY();
         int entryHeight = getContentHeight();
@@ -92,21 +93,20 @@ public class WaypointEntry extends WaypointListWidget.Entry {
             RendererHelper.drawCenteredTexture(context, x - 10, y + (entryHeight / 2) + 6, 0, 0, 16, 16, 16, 16, WaypointListWidget.otherDimensionIdentifier);
         }
         RendererHelper.drawScaledWaypointIcon(context, x + 4, y + (entryHeight / 2) + 6, waypoint.getIconID(), 2);
-        context.drawCenteredString(client.font, waypoint.getName(), x + client.font.width(waypoint.getName()) / 2 + 16 + 3, y + (entryHeight / 2) - client.font.lineHeight / 2, textColor);
+        context.centeredText(client.font, waypoint.getName(), x + client.font.width(waypoint.getName()) / 2 + 16 + 3, y + (entryHeight / 2) - client.font.lineHeight / 2, textColor);
         deleteWaypointButton.setX(x + entryWidth - 5 - deleteWaypointButton.getWidth());
         deleteWaypointButton.setY(y + entryHeight / 2 - deleteWaypointButton.getHeight() / 2);
-        deleteWaypointButton.render(context, mouseX, mouseY, tickDelta);
+        deleteWaypointButton.extractRenderState(context, mouseX, mouseY, tickDelta);
         hideWaypointButton.setX(x + entryWidth - 10 - hideWaypointButton.getWidth() - deleteWaypointButton.getWidth());
         hideWaypointButton.setY(y + entryHeight / 2 - hideWaypointButton.getHeight() / 2);
-        hideWaypointButton.render(context, mouseX, mouseY, tickDelta);
+        hideWaypointButton.extractRenderState(context, mouseX, mouseY, tickDelta);
         editWaypointButton.setX(x + entryWidth - 15 - hideWaypointButton.getWidth() - deleteWaypointButton.getWidth() - editWaypointButton.getWidth());
         editWaypointButton.setY(y + entryHeight / 2 - editWaypointButton.getHeight() / 2);
-        editWaypointButton.render(context, mouseX, mouseY, tickDelta);
+        editWaypointButton.extractRenderState(context, mouseX, mouseY, tickDelta);
         teleportWaypointButton.setX(x + entryWidth - 25 - hideWaypointButton.getWidth() - deleteWaypointButton.getWidth() - editWaypointButton.getWidth() - teleportWaypointButton.getWidth());
         teleportWaypointButton.setY(y + entryHeight / 2 - editWaypointButton.getHeight() / 2);
-        teleportWaypointButton.render(context, mouseX, mouseY, tickDelta);
+        teleportWaypointButton.extractRenderState(context, mouseX, mouseY, tickDelta);
         Identifier renderTexture = waypoint.isHidden() ? WaypointListWidget.hiddenTextureIdentifier : WaypointListWidget.visibleTextureIdentifier;
         context.blit(RenderPipelines.GUI_TEXTURED, renderTexture, hideWaypointButton.getX() + 1, hideWaypointButton.getY() + 1, 0, 0, 18, 18, 18, 18);
-
     }
 }

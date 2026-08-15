@@ -1,19 +1,19 @@
 package grauly.hudcompass.screens.waypointlist;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.NonNull;
 
 public class WaypointListScreen extends Screen {
 
+    public static final int BOTTOM_TEXT_HEIGHT = 53;
     private static final Minecraft mc = Minecraft.getInstance();
     private final Screen parent;
     private WaypointListWidget waypointList;
-
-    public static final int BOTTOM_TEXT_HEIGHT = 53;
 
     public WaypointListScreen(Screen parent) {
         super(Component.translatable("screen.hudcompass.waypointlist"));
@@ -36,9 +36,9 @@ public class WaypointListScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
-        waypointList.render(context,mouseX,mouseY,delta);
-        context.drawCenteredString(mc.font, Component.translatable("screen.hudcompass.waypointlist"), this.width / 2, 6, -1);
+    public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractRenderState(graphics, mouseX, mouseY, a);
+        waypointList.extractRenderState(graphics, mouseX, mouseY, a);
+        graphics.centeredText(mc.font, Component.translatable("screen.hudcompass.waypointlist"), this.width / 2, 6, -1);
     }
 }

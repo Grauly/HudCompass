@@ -6,8 +6,7 @@ import grauly.hudcompass.waypoints.Waypoint;
 import grauly.hudcompass.waypoints.WaypointLocation;
 import grauly.hudcompass.waypoints.WaypointManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
@@ -17,6 +16,7 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 
 import java.awt.*;
 
@@ -137,15 +137,15 @@ public class ConfigureWaypointScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    public void extractRenderState(@NonNull GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
         var width = mc.getWindow().getGuiScaledWidth();
         var height = mc.getWindow().getGuiScaledHeight();
-        super.render(context, mouseX, mouseY, delta);
+        super.extractRenderState(context, mouseX, mouseY, delta);
 
-        context.drawCenteredString(mc.font, "x:", width / 2 - 55 - 70 - 5 - 10, height / 2 - font.wordWrapHeight(Component.translatable("screen.hudcompass.waypoint.x").append(":"), 100) / 2, -1);
-        context.drawCenteredString(mc.font, "y:", width / 2 - 35 - 10, height / 2 - font.wordWrapHeight(Component.translatable("screen.hudcompass.waypoint.y").append(":"), 100) / 2, -1);
-        context.drawCenteredString(mc.font, "z:", width / 2 + 55 + 5 - 10, height / 2 - font.wordWrapHeight(Component.translatable("screen.hudcompass.waypoint.z").append(":"), 100) / 2, -1);
-        context.drawCenteredString(mc.font, Component.translatable("screen.hudcompass.newwaypoint"), width / 2, height / 2 - 66, -1);
+        context.centeredText(mc.font, "x:", width / 2 - 55 - 70 - 5 - 10, height / 2 - font.wordWrapHeight(Component.translatable("screen.hudcompass.waypoint.x").append(":"), 100) / 2, -1);
+        context.centeredText(mc.font, "y:", width / 2 - 35 - 10, height / 2 - font.wordWrapHeight(Component.translatable("screen.hudcompass.waypoint.y").append(":"), 100) / 2, -1);
+        context.centeredText(mc.font, "z:", width / 2 + 55 + 5 - 10, height / 2 - font.wordWrapHeight(Component.translatable("screen.hudcompass.waypoint.z").append(":"), 100) / 2, -1);
+        context.centeredText(mc.font, Component.translatable("screen.hudcompass.newwaypoint"), width / 2, height / 2 - 66, -1);
 
         var centerX = zCoord.getX() + zCoord.getWidth() / 2;
         var floorY = waypointName.getY() + waypointName.getHeight();
