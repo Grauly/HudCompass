@@ -12,7 +12,7 @@ import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.ToggleButtonWidget;
+import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -33,8 +33,8 @@ public class ConfigureWaypointScreen extends Screen {
     private TextFieldWidget yCoord;
     private TextFieldWidget zCoord;
     private TextFieldWidget waypointName;
-    private ToggleButtonWidget iconLeftButton;
-    private ToggleButtonWidget iconRightButton;
+    private TexturedButtonWidget iconLeftButton;
+    private TexturedButtonWidget iconRightButton;
     private int iconID = 11;
 
 
@@ -119,32 +119,21 @@ public class ConfigureWaypointScreen extends Screen {
 
         var centerX = zCoord.getX() + zCoord.getWidth() / 2;
 
-        iconLeftButton = new ToggleButtonWidget(centerX - 12 - 3 - 12, waypointName.getY(), 12, 17, false);
-        iconRightButton = new ToggleButtonWidget(centerX + 12 + 3, waypointName.getY(), 12, 17, false);
-        iconLeftButton.setTextures(leftButtonTextures);
-        iconRightButton.setTextures(rightButtonTextures);
-
-        this.addDrawableChild(iconLeftButton);
-        this.addDrawableChild(iconRightButton);
-    }
-
-    @Override
-    public boolean mouseClicked(Click click, boolean doubled) {
-        if (iconLeftButton.mouseClicked(click, doubled)) {
+        iconLeftButton = new TexturedButtonWidget(centerX - 12 - 3 - 12, waypointName.getY(), 12, 17, leftButtonTextures, (widget) -> {
             iconID--;
             if (iconID < 0) {
                 iconID = MAX_ICON_ID;
             }
-            return true;
-        }
-        if (iconRightButton.mouseClicked(click, doubled)) {
+        });
+        iconRightButton = new TexturedButtonWidget(centerX + 12 + 3, waypointName.getY(), 12, 17, rightButtonTextures, (widget) -> {
             iconID++;
             if (iconID > MAX_ICON_ID) {
                 iconID = 0;
             }
-            return true;
-        }
-        return super.mouseClicked(click, doubled);
+        });
+
+        this.addDrawableChild(iconLeftButton);
+        this.addDrawableChild(iconRightButton);
     }
 
     @Override
@@ -153,9 +142,9 @@ public class ConfigureWaypointScreen extends Screen {
         var height = mc.getWindow().getScaledHeight();
         super.render(context, mouseX, mouseY, delta);
 
-        context.drawCenteredTextWithShadow(mc.textRenderer, "x:", width / 2 - 55 - 70 - 5 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.x").getString() + ":", 100) / 2, -1);
-        context.drawCenteredTextWithShadow(mc.textRenderer, "y:", width / 2 - 35 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.y").getString() + ":", 100) / 2, -1);
-        context.drawCenteredTextWithShadow(mc.textRenderer, "z:", width / 2 + 55 + 5 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.z").getString() + ":", 100) / 2, -1);
+        context.drawCenteredTextWithShadow(mc.textRenderer, "x:", width / 2 - 55 - 70 - 5 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.x").append(":"), 100) / 2, -1);
+        context.drawCenteredTextWithShadow(mc.textRenderer, "y:", width / 2 - 35 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.y").append(":"), 100) / 2, -1);
+        context.drawCenteredTextWithShadow(mc.textRenderer, "z:", width / 2 + 55 + 5 - 10, height / 2 - textRenderer.getWrappedLinesHeight(Text.translatable("screen.hudcompass.waypoint.z").append(":"), 100) / 2, -1);
         context.drawCenteredTextWithShadow(mc.textRenderer, Text.translatable("screen.hudcompass.newwaypoint"), width / 2, height / 2 - 66, -1);
 
         var centerX = zCoord.getX() + zCoord.getWidth() / 2;
