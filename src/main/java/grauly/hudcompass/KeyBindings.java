@@ -26,10 +26,10 @@ public class KeyBindings {
 
     private static void tick(Minecraft client) {
         if (NEW_WAYPOINT.consumeClick()) {
-            client.setScreen(new ConfigureWaypointScreen(client.screen));
+            client.gui.setScreen(new ConfigureWaypointScreen(client.gui.screen()));
         }
         if (WAYPOINT_LIST.consumeClick()) {
-            client.setScreen(new WaypointListScreen(client.screen));
+            client.gui.setScreen(new WaypointListScreen(client.gui.screen()));
         }
     }
 

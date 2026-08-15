@@ -85,7 +85,7 @@ public class ConfigureWaypointScreen extends Screen {
 
         this.addRenderableWidget(Button
                 .builder(CommonComponents.GUI_CANCEL, (button -> {
-                    mc.setScreen(parent);
+                    mc.gui.setScreen(parent);
                 }))
                 .bounds(width / 2 - 98 - 2, height / 2 + 30, 98, 20)
                 .build());
@@ -112,7 +112,7 @@ public class ConfigureWaypointScreen extends Screen {
                     } catch (NumberFormatException e) {
                         //not needed as this is just a cancel
                     }
-                    mc.setScreen(parent);
+                    mc.gui.setScreen(parent);
                 })
                 .bounds(width / 2 + 2, height / 2 + 30, 98, 20)
                 .build());

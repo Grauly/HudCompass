@@ -25,8 +25,8 @@ public class HUDCompassRenderer {
 
     @Environment(EnvType.CLIENT)
     public static void onRender(GuiGraphicsExtractor context, DeltaTracker renderTickCounter) {
-        if (mc.options.hideGui) return;
-        if (((PlayerTabOverlayAccessor) mc.gui.getTabList()).isVisible()) return;
+        if (mc.gui.hud.isHidden()) return;
+        if (mc.options.keyPlayerList.isDown()) return;
         var width = mc.getWindow().getGuiScaledWidth();
         var textRenderer = mc.font;
         var player = mc.player;

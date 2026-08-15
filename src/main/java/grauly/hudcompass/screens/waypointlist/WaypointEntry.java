@@ -53,7 +53,7 @@ public class WaypointEntry extends WaypointListWidget.Entry {
                 .build();
         editWaypointButton = Button
                 .builder(Component.translatable("screen.hudcompass.waypointlist.edit"), button -> {
-                    client.setScreen(new ConfigureWaypointScreen(waypointListWidget.parent, waypoint));
+                    client.gui.setScreen(new ConfigureWaypointScreen(waypointListWidget.parent, waypoint));
                 }).bounds(0, 0, 35, 20)
                 .build();
         teleportWaypointButton = Button

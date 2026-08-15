@@ -26,7 +26,7 @@ public class WaypointListScreen extends Screen {
         waypointList = new WaypointListWidget(this, mc, this.width, this.height - BOTTOM_TEXT_HEIGHT);
         this.addWidget(waypointList);
         this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, (button -> {
-                            mc.setScreen(parent);
+                            mc.gui.setScreen(parent);
                         }))
                         //.dimensions(width / 2 + 150, height / 2 - 10, 50, 20)
                         .width(50)
